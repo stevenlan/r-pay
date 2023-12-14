@@ -52,9 +52,7 @@ public class FastDfsTemplate implements InitializingBean {
                 new NameValuePair("name", file.getName()),
                 new NameValuePair("type", file.getContentType())
         };
-        //String url = storageClient.upload_file1("group1", file.getBytes(), pojo.getSuffix(), nvp);
-        String[] ret = storageClient.upload_file("group1",file.getName(),"00",file.getBytes(), pojo.getSuffix(), nvp) ;
-        String url = ret != null ? ret[0] + "/" + ret[1] : null;
+        String url = storageClient.upload_file1(file.getBytes(), pojo.getSuffix(), nvp);
 
         pojo.setUrl(url);
         logger.debug(url);
