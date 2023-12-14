@@ -97,4 +97,4 @@ fs:
         network_timeout_in_seconds: 30
         charset: UTF-8
         http_tracker_http_port: 8888
-        tracker_servers: 172.22.143.138:22122
+        tracker_servers: 127.0.0.1:22122
