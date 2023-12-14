@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/rpay?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
-    username: root
-    password: BHdfh^4d!k
+    url: jdbc:mysql://localhost:3306/rpay?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: dev_rl
+    password: byr$3gT3Z1
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 fs:
