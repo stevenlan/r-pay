@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css :: loginCss"></head>
+<body class="hold-transition register-page">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <div class="register-box" style="width: 500px;">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <div class="user-block">
+                    <img class="img-circle" th:src="@{/assets/dist/img/avatar5.png}" alt="User Image">
+                    <span class="username" th:text="${user.email}">Individual</span>
+                    <span class="description" th:text="${user.kycType}">1@2.c</span>
+                </div>
+            </div>
+            <form action="saveIns" method="post" id="indivForm">
+                <input type="hidden" class="form-control" name="userId" th:value="${user.id}">
+                <div class="card-body">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Basic Information (Institution)</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Full Legal Name of Company / 公司完整法定名称</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Full Legal Name of Company" name="companyName" th:value="${info?.companyName}">
+                            </div>
+                            <label>Country of Incorporation or Organization / 公司或组织所属国家</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Country of Incorporation or Organization" name="country" th:value="${info?.country}">
+                            </div>
+                            <label>Date of Incorporation / 注册日期</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Date of Incorporation" name="regDate" th:value="${info?.regDate}">
+                            </div>
+                            <label>Principal Place of Business – Street Address (where the company physically conducts its businesses) / 主要营业地点-街道地址（公司实际开展业务的地方）</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" placeholder="Principal Place of Business..." name="busAddress" th:text="${info?.busAddress}"></textarea>
+                            </div>
+                            <label>Principal Place of Business – Country / 主要营业地点-国家</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Date of Incorporation" name="busCountry" th:value="${info?.busCountry}">
+                            </div>
+                            <label>Company Website (required; put “Not Applicable” if none) / 公司网站（必填；如果不适用，请输入“不适用”）</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Company Website" name="webSite" th:value="${info?.webSite}">
+                            </div>
+                            <label>Please describe your company’s business activities in detail / 请详细描述公司的业务活动</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control"  placeholder="company’s business activities in detail" name="busDetail" th:text="${info?.busDetail}"></textarea>
+                            </div>
+                            <label>What is the origin of your company’s funds or assets with which you will trade with us? / 您将与我们进行交易的公司资金或资产来源于哪里？</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="company’s business activities in detail" name="fundSource" th:value="${info?.fundSource}">
+                            </div>
+                            <label>Has your company ever been subject to any
+                                investigation, subpoena, and/or penalty by
+                                the US CFTC, OFAC, FinCEN, the SEC, the
+                                IRS or any other US federal or state
+                                regulatory body? /
+                                公司是否曾经受到美国 CFTC，OFAC，
+                                FinCEN，SEC，IRS 或任何其他美国联邦或
+                                州监管机构的调查，传票或罚款？</label>
+                            <div class="input-group mb-3">
+                                <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="publicFigure1" name="federal" value="Yes" th:checked="${info?.federal == 'Yes'}">
+                                        <label for="publicFigure1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="publicFigure2" name="federal" value="No" th:checked="${info?.federal == 'No'}">
+                                        <label for="publicFigure2">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>Has your company ever done business in or
+                                otherwise had significant contact with
+                                Belarus, Burundi, Central African Republic,
+                                Cuba, D.R. Congo, Iran, Iraq, Libya, North
+                                Korea, Russia, Somalia, Syria, South Sudan,
+                                Venezuela, Yemen or Zimbabwe? /
+                                公司是否曾在白俄罗斯，布隆迪，中非共
+                                和国，古巴，刚果，伊朗，伊拉克，利比
+                                亚，朝鲜，俄罗斯，索马里，叙利亚，南
+                                苏丹，委内瑞拉，也门或津巴布韦做过业
+                                务，或与公司有重要联系？</label>
+                            <div class="input-group mb-3">
+                                <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="somalia1" name="somalia" value="Yes" th:checked="${info?.somalia == 'Yes'}">
+                                        <label for="somalia1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="somalia2" name="somalia" value="No" th:checked="${info?.somalia == 'No'}">
+                                        <label for="somalia2">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Responsible Person Information (CEO, Chairman, General Manager or President, Etc.)</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Full Name / 全名</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Full Name" name="fullName" th:value="${info?.fullName}">
+                            </div>
+                            <label>Job Title / 职称</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Job Title" name="jobTitle" th:value="${info?.jobTitle}">
+                            </div>
+                            <label>Email / 邮箱</label>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Email" name="resEmail" th:value="${info?.resEmail}">
+                            </div>
+                            <label>Phone Number (include all country and area codes) / 电话号码（包括所有国家和地区代码）</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Phone Number" name="phone" th:value="${info?.phone}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Banking Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Bank Name / 银行名字</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Name / 银行名字" name="bankName" th:value="${bank?.bankName}">
+                            </div>
+                            <label>Bank Address / 银行地址</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" placeholder="Bank Address..." name="bankAddress" th:text="${bank?.bankAddress}"></textarea>
+                            </div>
+                            <label>Bank Country / 银行所在国家</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Country" name="bankCountry" th:value="${bank?.bankCountry}">
+                            </div>
+                            <label>Beneficiary Name / 收款人名称</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Country" name="beneficiaryName" th:value="${bank?.beneficiaryName}">
+                            </div>
+                            <label>Account Number / 银行账户</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Account Number" name="accountNumber" th:value="${bank?.accountNumber}">
+                            </div>
+                            <label>Beneficiary Address / 收款人地址</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Beneficiary Address" name="beneficiaryAddress" th:value="${bank?.beneficiaryAddress}">
+                            </div>
+                            <label>SWIFT or Routing Number/ABA (Please provide ABA if it is a bank in U.S. otherwise provide SWIFT / 如果是美国的银行, 请提供 ABA; 如果不是请提供 SWIFT)</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="SWIFT or Routing Number/ABA" name="soa" th:value="${bank?.soa}">
+                            </div>
+                            <label>I, as a person authorized to represent the account applicant, hereby certify that all information and materials provided in connection with this form are true, correct, accurate and complete to the best of my knowledge.
+                                <br>• Signature：Name，Title, Date / 确认签名，职位及签名时间的图片</label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.signaturePath == null ? 'display:none;':''}" id="signatureInfo">
+                                    <span id="signatureName"><i class="far fa-fw fa-file-word"></i> Signature</span><button opt="signature" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="signatureItem" th:style="${att?.signaturePath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="signaturePath" id="signaturePath" th:value="${att?.signaturePath}">
+                                        <input type="file" class="custom-file-input" id="signature" name="signature">
+                                        <label class="custom-file-label" for="signature">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                    For example :<br>
+                                    <div class="position-relative dropdown">
+                                        <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/sign.png}" alt="Photo 1" class="img-fluid" style="max-width: 271px;"></a>
+                                        <div class="dropdown-menu dropdown-menu-right p-0">
+                                            <img th:src="@{/assets/dist/img/sign.png}" alt="Photo 1" class="img-fluid" style="max-width: 450px;">
+                                        </div>
+                                        <div class="ribbon-wrapper">
+                                            <div class="ribbon bg-info">
+                                                Example
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">Documents Required</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Please provide the following documents and send to us within the onboarding form: / 请提供下列文件并和申请表一起提交 :
+                                <br>• Certificates of Incorporation / 注册证明
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.coiPath == null ? 'display:none;':''}" id="coiInfo">
+                                    <span id="coiName"><i class="far fa-fw fa-file-word"></i> Certificates of Incorporation</span><button opt="coi" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="coiItem" th:style="${att?.coiPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="coiPath" id="coiPath" th:value="${att?.coiPath}">
+                                        <input type="file" class="custom-file-input" id="coi" name="coi">
+                                        <label class="custom-file-label" for="coi">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                    For example :<br>
+                                    <div class="position-relative">
+                                        <div class="row">
+                                            <div class="vertical dropdown user-menu">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/hk-1.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/hk-1.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                            <div class="vertical">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/hk-2.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/hk-2.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                            <div class="vertical">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/hk-3.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/hk-3.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="vertical">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/inc-1.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/inc-1.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                            <div class="vertical">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/inc-2.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/inc-2.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                            <div class="vertical">
+                                                <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/inc.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 90px;"></a>
+                                                <div class="dropdown-menu dropdown-menu-right p-0">
+                                                    <img th:src="@{/assets/dist/img/inc.jpg}" alt="Photo 1" class="img-fluid" style="max-width: 400px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ribbon-wrapper">
+                                            <div class="ribbon bg-primary">
+                                                Example
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Memorandum and Articles of Association / 章程
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.associationPath == null ? 'display:none;':''}" id="associationInfo">
+                                    <span id="associationName"><i class="far fa-fw fa-file-word"></i> Association</span><button opt="association" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="associationItem" th:style="${att?.associationPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="associationPath" id="associationPath" th:value="${att?.associationPath}">
+                                        <input type="file" class="custom-file-input" id="association" name="association">
+                                        <label class="custom-file-label" for="association">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Register of Director / 董事名单
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.directorPath == null ? 'display:none;':''}" id="directorInfo">
+                                    <span id="directorName"><i class="far fa-fw fa-file-word"></i> Register of Director</span><button opt="director" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="directorItem" th:style="${att?.directorPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="directorPath" id="directorPath" th:value="${att?.directorPath}">
+                                        <input type="file" class="custom-file-input" id="director" name="director">
+                                        <label class="custom-file-label" for="director">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Register of Shareholders / 股东名单
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.rosPath == null ? 'display:none;':''}" id="rosInfo">
+                                    <span id="rosName"><i class="far fa-fw fa-file-word"></i> Register of Shareholders</span><button opt="ros" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="rosItem" th:style="${att?.rosPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="rosPath" id="rosPath" th:value="${att?.rosPath}">
+                                        <input type="file" class="custom-file-input" id="ros" name="ros">
+                                        <label class="custom-file-label" for="ros">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Organization Structure / 组织架构
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.orgStrPath == null ? 'display:none;':''}" id="orgStrInfo">
+                                    <span id="orgStrName"><i class="far fa-fw fa-file-word"></i> Organization Structure</span><button opt="orgStr" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="orgStrItem" th:style="${att?.orgStrPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="orgStrPath" id="orgStrPath" th:value="${att?.orgStrPath}">
+                                        <input type="file" class="custom-file-input" id="orgStr" name="orgStr">
+                                        <label class="custom-file-label" for="orgStr">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Proof of Address within 3 months / 日期三个月内的地址证明
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.comPoaPath == null ? 'display:none;':''}">
+                                    <span id="comPoaName"><i class="far fa-fw fa-file-word"></i> Proof of Address</span><button opt="comPoa" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="comPoaItem" th:style="${att?.comPoaPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="comPoaPath" id="comPoaPath" th:value="${att?.comPoaPath}">
+                                        <input type="file" class="custom-file-input" id="comPoa" name="comPoa">
+                                        <label class="custom-file-label" for="comPoa">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Source of Funds / 资金来源
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.comSofPath == null ? 'display:none;':''}" id="comSofInfo">
+                                    <span id="comSofName"><i class="far fa-fw fa-file-word"></i> Source of Funds</span><button opt="comSof" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="comSofItem" th:style="${att?.comSofPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="comSofPath" id="comSofPath" th:value="${att?.comSofPath}">
+                                        <input type="file" class="custom-file-input" id="comSof" name="comSof">
+                                        <label class="custom-file-label" for="comSof">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                For each Director, each 25% Ultimate Beneficial Shareholder, please provide the following documents : / 对于每位董事（每位 25％的最终实益股东），请提供以下文件：
+                                <br>• Passport / 护照
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.passportPath == null ? 'display:none;':''}" id="passportInfo">
+                                    <span id="passportName"><i class="far fa-fw fa-file-word"></i> Passport</span><button opt="passport" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="passportItem" th:style="${att?.passportPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="passportPath" id="passportPath" th:value="${att?.passportPath}">
+                                        <input type="file" class="custom-file-input" id="passport" name="passport">
+                                        <label class="custom-file-label" for="passport">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>
+                                • Proof of Address within 3 months / 日期三个月内的地址证明
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.poaPath == null ? 'display:none;':''}" id="poaInfo">
+                                    <span id="poaName"><i class="far fa-fw fa-file-word"></i> Director Proof of Address</span><button opt="poa" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="poaItem" th:style="${att?.poaPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="poaPath" id="poaPath" th:value="${att?.poaPath}">
+                                        <input type="file" class="custom-file-input" id="poa" name="poa">
+                                        <label class="custom-file-label" for="poa">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="toastsContainerTopRight" class="toasts-bottom-right fixed" style="width: 400px;">
+        <div class="card card-outline card-danger">
+            <div class="card-header">
+                <h3 class="card-title text-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Failure Reason:
+                </h3>
+                <div class="card-tools">
+                    <span title="New Messages" class="badge bg-danger">i</span>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <p th:text="${kyc?.reason}">some error.</p>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- jquery-validation -->
+<script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.min.js}"></script>
+
+<script>
+$(function () {
+  var uploading = false;
+  function updateFile(event) {
+    if(uploading){
+        alert("文件正在上传中，请稍候");
+        return false;
+    }
+    /*
+    let name = event.currentTarget.files[0].name ;
+    let elementId = event.currentTarget.id ;
+    $("#"+elementId+"Name")[0].innerHTML = '<i class="far fa-fw fa-file-word"></i>'+name ;
+    $("#"+elementId)[0].value = null ;
+    $("#"+elementId+"Item")[0].style.display = "none" ;
+    $("#"+elementId+"Info")[0].style.display = "" ;
+    */
+    var formData = new FormData();
+    formData.append("file",event.currentTarget.files[0]) ;
+    $.ajax({
+        url: "file/upload",
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        xhr: function () {
+          //获取xmlhttprequest对象或者ActiveXObject 对象，jquery中封装好的。
+          var xhr = $.ajaxSettings.xhr();
+          if ( xhr.upload) {
+            xhr.upload.addEventListener( "progress", function(evt) {
+                let elementId = event.currentTarget.id ;
+                let rate = $("#"+elementId+"Item span") ;
+                let bar = $("#"+elementId+"Item div.progress-bar") ;
+                console.log(elementId) ;
+                var loaded = evt.loaded; //已经上传大小情况
+                var tot = evt.total; //附件总大小
+                var per = Math.floor( 100 * loaded / tot); //已经上传的百分比
+                rate.html(per+"%") ;
+                bar.width(per+"%") ;}, false);
+          }
+          return xhr;
+        },
+        success : function(data) {
+            if (data.code == 200) {
+                let name = event.currentTarget.files[0].name ;
+                let elementId = event.currentTarget.id ;
+
+                $("#"+elementId+"Path")[0].value = data.data[0] ;
+                $("#"+elementId+"Name")[0].innerHTML = '<i class="far fa-fw fa-file-word"></i>'+name ;
+                $("#"+elementId)[0].value = null ;
+                $("#"+elementId+"Item")[0].style.display = "none" ;
+                $("#"+elementId+"Info")[0].style.display = "" ;
+                event.currentTarget.value = null ;
+            } else {
+                alert(data.msg);
+            }
+            uploading = false;
+        }
+    });
+  }
+  $(".btn-warning").on("click",function(event){
+    let eId = event.currentTarget.attributes["opt"].value ;
+    let rate = $("#"+eId+"Item span") ;
+    let bar = $("#"+eId+"Item div.progress-bar") ;
+    rate.html("0%") ;
+    bar.width("0%") ;
+    $("#"+eId+"Item")[0].style.display = "" ;
+    $("#"+eId+"Info")[0].style.display = "none" ;
+  }) ;
+  $("#signature").on("change", updateFile);
+  $("#coi").on("change", updateFile);
+  $("#association").on("change", updateFile);
+  $("#director").on("change", updateFile);
+  $("#ros").on("change", updateFile);
+  $("#orgStr").on("change", updateFile);
+  $("#comPoa").on("change", updateFile);
+  $("#comSof").on("change", updateFile);
+  $("#passport").on("change", updateFile);
+  $("#poa").on("change", updateFile);
+
+  $.validator.setDefaults({
+    submitHandler: function () {
+      if(uploading){
+        return false;
+      }
+      $.ajax({
+        url: "saveIns",
+        type: 'POST',
+        cache: false,
+        data: new FormData($('#indivForm')[0]),
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        success : function(data) {
+            if (data.code == 200) {
+                location.replace('/');
+            } else {
+                alert(data.msg);
+            }
+            uploading = false;
+        }
+      });
+    }
+  });
+  $('#indivForm').validate({
+    rules: {
+      companyName: {
+        required: true,
+      },
+      country: {
+        required: true,
+      },
+      regDate: {
+        required: true,
+      },
+      busAddress: {
+        required: true,
+      },
+      busCountry: {
+        required: true,
+      },
+      webSite: {
+        required: true,
+      },
+      busDetail: {
+        required: true,
+      },
+      fundSource: {
+        required: true,
+      },
+      federal: {
+        required: true,
+      },
+      fullName: {
+        required: true,
+      },
+      jobTitle: {
+        required: true,
+      },
+      resEmail: {
+        required: true,
+        email: true,
+      },
+      phone: {
+        required: true,
+      },
+      somalia: {
+        required: true,
+      },
+      bankName: {
+        required: true,
+      },
+      bankAddress: {
+        required: true,
+      },
+      bankCountry: {
+        required: true,
+      },
+      beneficiaryName: {
+        required: true,
+      },
+      accountNumber: {
+        required: true,
+      },
+      beneficiaryAddress: {
+        required: true,
+      },
+      soa: {
+        required: true,
+      },
+      signature: {
+        required: true,
+      },
+      coi: {
+        required: true,
+      },
+      association: {
+        required: true,
+      },
+      director: {
+        required: true,
+      },
+      ros:{
+        required: true,
+      },
+      orgStr:{
+        required: true,
+      },
+      comPoa:{
+        required: true,
+      },
+      comSof:{
+        required: true,
+      },
+      passport:{
+        required: true,
+      },
+      poa:{
+        required: true,
+      }
+    },
+    messages: {
+      resEmail: {
+        required: "Please enter a email address",
+        email: "Please enter a valid email address"
+      }
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.input-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+});
+</script>
+</body>
+</html>

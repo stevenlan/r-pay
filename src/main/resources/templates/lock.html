@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LuBlock | Log in</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome-free/css/all.min.css}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/assets/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition lockscreen">
+<div class="lockscreen-wrapper">
+    <div class="lockscreen-logo">
+        <b>Admin</b>LuBlock
+    </div>
+    <div class="lockscreen-name">Wecome! <span th:text="${user.nickName}">John Doe</span></div>
+    <!-- START LOCK SCREEN ITEM -->
+    <div class="lockscreen-item" style="width: 330px;">
+        <!-- lockscreen image -->
+        <div class="lockscreen-image">
+            <img th:src="@{/assets/dist/img/avatar5.png}" alt="User Image">
+        </div>
+        <!-- User name -->
+        <form class="lockscreen-credentials">
+            <div class="input-group">
+                <div class="input-group-append" style="height: 38px;">
+                    <button type="button" class="btn">Your account is pending approval.</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- /.lockscreen-item -->
+    <div class="help-block text-center">
+        please wait patiently for approval.<br>
+        or contact us by email<br>
+        <i class="fa fa-envelope"></i> <a href="#" class="text-black">admin@lublock.com</a>
+    </div>
+    <div class="lockscreen-footer text-center">
+        Copyright &copy; 2021-2022 <b><a href="#" class="text-black">LuBlock.</a></b><br>
+        All rights reserved
+    </div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.min.js}"></script>
+</body>
+</html>

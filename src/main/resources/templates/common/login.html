@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav class="main-header navbar navbar-expand text-sm border-bottom-0" th:fragment="navTop">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i th:class="|flag-icon flag-icon-${#strings.substringAfter(#response.getLocale().toString().toLowerCase,'_')}|"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right p-0">
+                <a href="?_lang=en_US" th:class="|dropdown-item${#strings.equalsIgnoreCase(#response.getLocale().toString(), 'en_US')?' active':''}|">
+                    <i class="flag-icon flag-icon-us mr-2"></i> <span th:text="#{common.lang}">English</span>
+                </a>
+                <a href="?_lang=zh_CN" th:class="|dropdown-item${#strings.equalsIgnoreCase(#response.getLocale().toString(), 'zh_CN')?' active':''}|">
+                    <i class="flag-icon flag-icon-cn mr-2"></i> <span th:text="#{common.lang.china}">China</span>
+                </a>
+                <a  href="?_lang=zh_HK" th:class="|dropdown-item${#strings.equalsIgnoreCase(#response.getLocale().toString(), 'zh_HK')?' active':''}|">
+                    <i class="flag-icon flag-icon-hk mr-2"></i> <span th:text="#{common.lang.hk}">China hk</span>
+                </a>
+            </div>
+        </li>
+    </ul>
+</nav>
+</html>

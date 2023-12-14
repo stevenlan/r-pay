@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css :: loginCss"></head>
+<body class="hold-transition">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <nav th:replace="common/login :: navTop"></nav>
+    <div class="register-page">
+        <div class="register-box">
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <a href="#" class="h1"><b>Admin</b>LuBlock</a>
+                </div>
+                <div class="card-body">
+                    <p class="login-box-msg">Register a new membership</p>
+
+                    <div class="callout callout-danger" style="display: none;">
+                        <p id="errTips" class="text-danger">There is a problem that we need to fix.</p>
+                    </div>
+                    <form action="../../index.html" method="post">
+                        <input type="hidden" class="form-control" name="inviteCode" th:value="${inviteCode}">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Email" name="email">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" placeholder="Password" name="password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" placeholder="Retype password" name="retype">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <!-- radio -->
+                            <div class="form-group clearfix">
+                                <div class="icheck-primary d-inline">
+                                    <input type="radio" id="radioPrimary1" name="kycType" value="individual" checked>
+                                    <label for="radioPrimary1">
+                                        Individual/个人
+                                    </label>
+                                </div>
+                                <div class="icheck-primary d-inline">
+                                    <input type="radio" id="radioPrimary2" name="kycType" value="institution">
+                                    <label for="radioPrimary2">
+                                        Institution/企业
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="code" name="code" style="height: 62px;">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <img class="login-captcha" alt=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="agreeTerms" name="terms" value="agree" checked>
+                                    <label for="agreeTerms">
+                                        I agree to the <a href="#">terms</a>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </form>
+
+                    <!--a th:href="${/login}" class="text-center">I already have a membership</a-->
+                </div>
+                <!-- /.form-box -->
+            </div><!-- /.card -->
+        </div>
+        <!-- /.register-box -->
+    </div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.min.js}"></script>
+<script>
+$(document).ready(function(){
+  $("form").submit(function(event){
+    event.preventDefault();
+    var form = event.currentTarget ;
+    if (form["password"].value != form["retype"].value) {
+        $("#errTips")[0].innerText = "password: Please enter the same value again." ;
+        $("#errTips")[0].parentElement.style.display = "" ;
+        return ;
+    }
+    $("button.btn-primary")[0].disabled = false ;
+    //console.log(form) ;
+    $.post("reg",{
+        inviteCode:form["inviteCode"].value,
+        email:form["email"].value ,
+        password:form["password"].value ,
+        kycType:form["kycType"].value ,
+        code:form["code"].value
+    },
+    function(data,status){
+        if ( data.code == 200 ) {
+            location.replace('/login');
+        } else {
+            $("#errTips")[0].innerText = data.msg ;
+            $("#errTips")[0].parentElement.style.display = "" ;
+            $("button.btn-primary")[0].disabled = true ;
+            $('img.login-captcha').trigger('click');
+        }
+    });
+  });
+  /* 图形验证码 */
+    var captchaUrl = '/assets/captcha';
+    $('img.login-captcha').click(function () {
+        this.src = captchaUrl + '?t=' + (new Date).getTime();
+    }).trigger('click');
+});
+</script>
+</body>
+</html>

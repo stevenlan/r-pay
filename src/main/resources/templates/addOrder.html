@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="common/css :: adminCss(ionicons='ionicons')"></head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+
+    <!-- Preloader -->
+    <div th:replace="common/plus :: preloader"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="common/plus :: navTop"></nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside th:replace="common/plus :: mainSidebar('trade')"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0" th:text="#{trade.add}">Add Order</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#" th:text="#{common.home}">Home</a></li>
+                            <li class="breadcrumb-item active" th:text="#{trade.add}">Add Order</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Main row -->
+                <div class="row">
+                    <div class="card-header col-md-8 offset-md-2">
+                        <div class="input-group">
+                            <input type="search" class="form-control form-control-lg" placeholder="Who Trade? Type name or email here">
+                            <div class="input-group-append">
+                                <button type="button" id="searchUser" class="btn btn-lg btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="text-info"><i class="fas fa-universal-access"></i> <span th:text="#{trade.choose}">Choose Custom</span></h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="jsGrid1"></div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer"></div>
+                    </div>
+                </div>
+                <div class="row" id="orderInfo" style="display: none;">
+                    <!--fas fa-cart-plus-->
+                    <div class="card" style="width: 100%">
+                        <div class="card-header">
+                            <h4 class="text-warning"><i class="fas fa-cart-plus"></i> <span th:text="#{trade.info}">Order Info</span></h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="policy">
+                                <input type="hidden" name="userId">
+                                <div class="row">
+                                    <div class="card col-5 col-md-5">
+                                        <div class="card-header text-muted border-bottom-0">
+                                            <span id="kycType">Individual</span>
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <h2 class="lead"><b id="tradeName">Nicole Pearson</b></h2>
+                                                    <p class="text-muted text-sm"><b>Email: </b> <span id="tradeEmail">forexme@fgohg.com</span></p>
+                                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                        <label class="btn btn-info active" style="white-space: nowrap;">
+                                                            <input type="radio" name="side" id="option_a1" autocomplete="off" value="1" checked> <span th:text="#{trade.side.sell}">SELL</span>
+                                                        </label>
+                                                        <label class="btn btn-info" style="white-space: nowrap;">
+                                                            <input type="radio" name="side" id="option_a2" autocomplete="off" value="2"> <span th:text="#{trade.side.buy}">BUY</span>
+                                                        </label>
+                                                        <select class="custom-select form-control-border" name="market">
+                                                            <option value="1" selected>USDT / USD</option>
+                                                            <option value="2">BTC / USDT</option>
+                                                            <option value="3">BTC / USD</option>
+                                                            <option value="4">ETH / USDT</option>
+                                                            <option value="5">ETH / USD</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 text-center">
+                                                    <img th:src="@{/assets/dist/img/avatar5.png}" alt="user-avatar" class="img-circle img-fluid" width="64" height="64">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card col-7">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-default" th:text="#{trade.quantity}">Quantity</button>
+                                                    </div>
+                                                    <input type="text" name="quantity" class="form-control" placeholder="Enter Quantity">
+                                                </div>
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-default" th:text="#{trade.price}">Price</button>
+                                                    </div>
+                                                    <input type="text" name="price" class="form-control" placeholder="Enter Price">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-default" th:text="#{trade.value}">Trade Value</button>
+                                                    </div>
+                                                    <input type="text" name="tradeValue" class="form-control" placeholder="Enter Trade Value">
+                                                </div>
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-default" th:text="#{trade.esp}">ESP Price</button>
+                                                    </div>
+                                                    <input type="text" name="esp" class="form-control" placeholder="Enter ESP">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-success" th:text="#{trade.total.profit}">Total Profit</button>
+                                                    </div>
+                                                    <input type="text" name="profit" class="form-control" placeholder="Enter Total Profit">
+                                                </div>
+                                                <div class="col-6 input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-warning" th:text="#{trade.inv.profit}">My Profit</button>
+                                                    </div>
+                                                    <input type="text" name="myProfit" class="form-control" placeholder="Enter User Profit">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <button type="button" id="orderSave" class="btn btn-success float-right"><i class="far fa-credit-card"></i> <span th:text="#{common.save}">Save</span>
+                            </button>
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <a href="/trade" class="btn btn-default" id="goBack"><i class="fas fa-chevron-left"></i> <span th:text="#{common.back}">Back</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer th:replace="common/plus :: adminFooter"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- overlayScrollbars -->
+<script th:src="@{/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<!-- jsGrid -->
+<script th:src="@{/assets/js/users.js}"></script>
+<script th:src="@{/assets/plugins/jsgrid/jsgrid.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.js}"></script>
+<script>
+  $(function () {
+    $("#searchUser").on("click",function(){
+      pageLoad(1,15);
+    })
+    function loadPage(args){
+      let g = args.grid ;
+      pageLoad(pageIndex,g.pageSize) ;
+    }
+    $("#jsGrid1").jsGrid({
+
+        height: "100%",
+        width: "100%",
+
+        paging: true,
+        pageLoading: true,
+        pageSize: 15,
+        onPageChanged: loadPage,
+
+        fields: s_f
+    });
+
+    function pageLoad(no,size) {
+      $.post("/user/approveUsers",{
+        search: $("input[type='search']").val(),
+        options: 1,
+        pageIndex: no ? no : 1,
+        pageSize: size ? size : 15
+      },renderPage);
+    }
+
+    function renderPage(res,status) {
+      let g = $("#jsGrid1").data().JSGrid ;
+      console.log(res.data.records);
+      g.data = res.data.records ;
+      g._loadStrategy._itemsCount = res.data.total;
+      g.render();
+      if ( g.pageSize >= res.data.total ) {
+        setTimeout(() => {
+          $("div.jsgrid-grid-body")[0].style.height = "auto" ;
+        }, 100);
+      }
+      if (!res.data.records || res.data.records.length == 0) {
+        $("div.jsgrid-grid-body td.jsgrid-cell")[0].style.background = "#fff0" ;
+      }
+    }
+
+    $("form input[type='text']").bind("blur",required) ;
+    $("form input[type='radio']").bind("change",totalCp) ;
+    function required(e) {
+        let et = e;
+        if ( e.currentTarget ) {
+            et = e.currentTarget ;
+        }
+        if ( !et.value ) {
+            $(et).addClass("is-invalid") ;
+            return false ;
+        } else if ( isNaN(et.value) ){
+            $(et).addClass("is-invalid") ;
+            return false ;
+        }  else {
+          totalCp();
+          $(et).removeClass("is-invalid") ;
+          return true ;
+        }
+    }
+
+    function totalCp() {
+      if ($("form")[0]["quantity"].value && $("form")[0]["price"].value) {
+        var total
+        if ( $("form")[0]["side"].value == 1 ) {
+          total = $("form")[0]["quantity"].value*$("form")[0]["price"].value ;
+        } else {
+          total = $("form")[0]["quantity"].value/$("form")[0]["price"].value ;
+        }
+        $("form")[0]["tradeValue"].value = Math.round(total * 10000) / 10000 ;
+      }
+      if ($("form")[0]["tradeValue"].value && $("form")[0]["esp"].value) {
+        var total
+        if ( $("form")[0]["side"].value == 1 ) {
+          total = $("form")[0]["quantity"].value*$("form")[0]["esp"].value ;
+        } else {
+          total = $("form")[0]["quantity"].value/$("form")[0]["esp"].value ;
+        }
+        $("form")[0]["profit"].value = Math.round( (total  - $("form")[0]["tradeValue"].value) * 10000) / 10000 ;
+      }
+    }
+
+    $("#orderSave").on("click",function(e){
+      var flag = true ;
+      e.currentTarget.disabled = true ;
+      $("#goBack")[0].style.pointerEvents = "none" ;
+      $("form input[type='text']").each(function(i,e){
+        flag = flag & required(e) ;
+      }) ;
+      if ( flag ) {
+        $.post("/trade/add",{
+          userId: $("form input[name='userId']").val(),
+          side: $("form")[0]["side"].value,
+          market: $("form")[0]["market"].value,
+          quantity: $("form input[name='quantity']").val(),
+          price: $("form input[name='price']").val(),
+          tradeValue: $("form input[name='tradeValue']").val(),
+          espPrice: $("form input[name='esp']").val(),
+          profit: $("form input[name='profit']").val(),
+          myProfit: $("form input[name='myProfit']").val()
+        },function(res){
+          if ( res.code == 200 ) {
+            location.replace('/trade');
+          } else {
+            e.currentTarget.disabled = false ;
+            $("#goBack")[0].style.pointerEvents = "" ;
+            alert(res.msg) ;
+        }
+        }) ;
+      } else {
+        e.currentTarget.disabled = false ;
+        $("#goBack")[0].style.pointerEvents = "" ;
+        return ;
+      }
+    }) ;
+  });
+</script>
+</body>
+</html>

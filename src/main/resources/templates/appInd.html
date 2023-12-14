@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css :: adminCss(notIcon='not',notGrid='not')"></head>
+<body class="hold-transition dark-mode sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <!-- Preloader -->
+    <div th:replace="common/plus :: preloader"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="common/plus :: navTop"></nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside th:replace="common/plus :: mainSidebar('user')"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0" th:text="#{user.ind.detail}">Individual Detail</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#" th:text="#{common.home}">Home</a></li>
+                            <li class="breadcrumb-item active" th:text="#{user.ind.detail}">Individual Detail</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="user-block">
+                        <img class="img-circle" th:src="@{/assets/dist/img/avatar4.png}" alt="User Image">
+                        <span class="username" th:text="${targetUser.nickName}">Individual</span>
+                        <span class="description" th:text="${targetUser.email}">1@2.c</span>
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" id="Approved" class="btn btn-success"><i class="far fa-credit-card"></i> <span th:text="#{user.approve}">Approved</span>
+                        </button>
+                        <button type="button" id="Reject" class="btn btn-primary" style="margin-right: 5px;">
+                            <i class="fas fa-stop"></i> <span th:text="#{user.reject}">Reject</span>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>
+                                        <i class="fas fa-globe"></i> <span th:text="#{user.baseInfo}">Basic Information</span>
+                                    </h4>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-6 invoice-col">
+                                    <b th:text="#{user.info.firstName}">First Name</b>: <spn th:text="${info.firstName}">abc</spn><br>
+                                    <b th:text="#{user.info.lastName}">Last Name</b>: <spn th:text="${info.lastName}">drf</spn><br>
+                                    <b th:text="#{user.info.citizenship}">Citizenship</b>: <spn th:text="${info.citizenship}">cn</spn><br>
+                                    <b>Email: <spn th:text="${info.email}">aa@bb.com</spn></b><br>
+                                    <b th:text="#{user.info.resAddress}">Residential Address</b>:<br>
+                                    <spn th:text="${info.resAddress}">795 Folsom Ave, Suite 600
+                                        San Francisco, CA 94107</spn><br>
+                                    <b><span th:text="#{user.info.phone}">Phone</span>: <spn th:text="${info.phone}">+86xxxxxxxx</spn></b><br>
+                                    <b th:text="#{user.info.birth}">Date of Birth</b>: <spn th:text="${info.birth}">2/22/2014</spn><br>
+                                    <b th:text="#{user.info.sources}">sources of income and wealth</b>:<br>
+                                    <spn th:text="${info.sources}">968-34567</spn><br>
+                                    <b th:text="#{user.info.profile}">Personal biography</b>:<br>
+                                    <spn th:text="${info.profile}">Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
+                                        plugg</spn><br><br>
+                                    <b th:text="#{user.info.indSomalia}">Have you ever done business in, spent significant time in or otherwise had significant contact with Belarus, Burundi, Central African Republic, Cuba, D.R. Congo, Iran, Iraq, Libya, North Korea, Russia, Somalia, Syria, South Sudan, Venezuela, Yemen or Zimbabwe?</b><br>
+                                    <spn th:text="${info.somalia}">No</spn>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-6 invoice-col">
+                                    <b th:text="#{user.info.publicFigure}">Are you a public figure, politician or embassy or consulate employee, or related to any public figure, politician or embassy or consulate employee?</b><br>
+                                    <spn th:text="${info.publicFigure}">No</spn><br>
+                                    <h4 class="text-primary"><i class="fas fa-university"></i> <span th:text="#{user.bankInfo}">Banking Information</span></h4>
+                                    <b th:text="#{user.bank.name}">Bank Name</b>: <spn th:text="${bank.bankName}">aaaaaa</spn><br>
+                                    <b th:text="#{user.bank.country}">Bank Country</b>: <spn th:text="${bank.bankCountry}">cn</spn><br>
+                                    <b th:text="#{user.bank.beneficiaryName}">Beneficiary Name</b>: <spn th:text="${bank.beneficiaryName}">def abc</spn><br>
+                                    <b th:text="#{user.bank.accountNumber}">Account Number</b>: <spn th:text="${bank.accountNumber}">1234567</spn><br><br>
+                                    <b th:text="#{user.bank.beneficiaryAddress}">Beneficiary Address</b>:<br>
+                                    <spn th:text="${bank.beneficiaryAddress}">795 Folsom Ave, Suite 600 San Francisco, CA 94107</spn><br>
+                                    <b th:text="#{user.bank.soa}">SWIFT or Routing Number/ABA</b>:<br>
+                                    <spn th:text="${bank.soa}">aba24796</spn><br><br>
+                                    <b th:text="#{user.bank.bankAddress}">Bank Address</b>:<br>
+                                    <spn th:text="${bank.bankAddress}">795 Folsom Ave, Suite 600 San Francisco, CA 94107</spn><br>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                            <h4 class="text-muted"><i class="fa fa-folder-open"></i> <span th:text="#{user.docInfo}">Documents files</span></h4>
+                            <div class="text-muted">
+                                <ul class="list-unstyled">
+                                    <li><b th:text="#{user.doc.signature}">Signature</b>:<br>
+                                        <a th:href="@{/file/downLoad?url=}+${att.signaturePath}" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Signature</a>
+                                    </li>
+                                    <li><b th:text="#{user.doc.passport}">Passport</b>:<br>
+                                        <a th:href="@{/file/downLoad?url=}+${att.passportPath}" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Passport</a>
+                                    </li>
+                                    <li><b th:text="#{user.doc.poa}">Proof of Address within 3 months</b>:<br>
+                                        <a th:href="@{/file/downLoad?url=}+${att.poaPath}" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Proof of Address</a>
+                                    </li>
+                                    <li><b th:text="#{user.doc.sof}">Source of Funds:</b><br>
+                                        <a th:href="@{/file/downLoad?url=}+${att.sofPath}" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Source of Funds</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <div class="card" id="plable" style="display: none;">
+                <div class="card-header">
+                    <h4 class="text-warning"><i class="fas fa-balance-scale"></i> <span th:text="#{user.policy}">Policy</span></h4>
+                </div>
+                <div class="card-body">
+                    <form id="policy">
+                        <input type="hidden" name="userId" th:value="${targetUser.id}">
+                        <input type="hidden" name="options" value="">
+                        <!-- 暂时不需要策略 -->
+                        <!-- div class="row" id="appr">
+                            <div class="col-4 col-md-4 input-group col-lg-4">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-danger">ESP Price</button>
+                                </div>
+                                <input type="text" name="esp" class="form-control" placeholder="0.95000~0.99950">
+                            </div>
+                            <div class="col-4 col-md-4 input-group col-lg-4">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning">Min Value($)</button>
+                                </div>
+                                <input type="text" name="minValue" class="form-control" placeholder="50000">
+                            </div>
+                        </div-->
+                        <div class="row" id="rej">
+                            <div class="col-7 col-md-7 input-group col-lg-7">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning" th:text="#{user.reject.reason}">Reject Reason</button>
+                                </div>
+                                <textarea class="form-control" placeholder="enter reason..." name="reason"></textarea>
+                                <!--input type="text" name="reason" class="form-control" placeholder="enter reason"-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <button type="button" id="policySave" class="btn btn-success float-right"><i class="far fa-credit-card"></i> <span th:text="#{common.save}">Save</span></button>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row no-print">
+                    <div class="col-12">
+                        <a href="/user" class="btn btn-default" id="goBack"><i class="fas fa-chevron-left"></i> <span th:text="#{common.back}">Back</span></a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer th:replace="common/plus :: adminFooter"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.min.js}"></script>
+<script>
+  $("#Approved").on("click",function(e){
+    if ( $("form")[0]["options"].value != "approved" ) {
+      $("form")[0]["options"].value = "approved"
+      //$("#appr")[0].style.display = "" ;
+      //$("#rej")[0].style.display = "none" ;
+      //$("#plable")[0].style.display = "" ;
+      //$("form")[0]["esp"].focus();
+      appUser() ;
+    }
+  }) ;
+  $("#Reject").on("click",function(e){
+    if ( $("form")[0]["options"].value != "reject" ) {
+      $("form")[0]["options"].value = "reject"
+      //$("#appr")[0].style.display = "none" ;
+      $("#rej")[0].style.display = "" ;
+      $("#plable")[0].style.display = "" ;
+      $("form")[0]["reason"].focus();
+    }
+  }) ;
+  $("#policySave").on("click",function(e){
+    if ( $("form")[0]["options"].value == "approved" ) {
+      if ( !required($("form")[0]["esp"]) | !required($("form")[0]["minValue"]) ) {
+        return ;
+      }
+    } else {
+      if ( !required($("form")[0]["reason"])) {
+        return ;
+      }
+    }
+    e.currentTarget.disabled = true ;
+    $("#goBack")[0].style.pointerEvents = "none" ;
+
+    appUser() ;
+  }) ;
+  $("form input[type='text']").bind("blur",required) ;
+
+  function required(e) {
+    let et = e;
+    if ( e.currentTarget ) {
+      et = e.currentTarget ;
+    }
+    if ( !et.value ) {
+      $(et).addClass("is-invalid") ;
+      return false ;
+    } else {
+      $(et).removeClass("is-invalid") ;
+      return true ;
+    }
+  }
+
+  function appUser() {
+    $.post("/user/approve",{
+        userId: $("form")[0]["userId"].value,
+        //esp: $("form")[0]["esp"].value,
+        //minValue: $("form")[0]["minValue"].value,
+        reason: $("form")[0]["reason"].value,
+        options: $("form")[0]["options"].value
+      },function(res){
+        if ( res.code == 200 ) {
+          location.replace('/user');
+        } else {
+          $("#policySave")[0].disabled = false ;
+          $("#goBack")[0].style.pointerEvents = "" ;
+          alert(res.msg) ;
+        }
+      });
+  }
+</script>
+</body>
+</html>

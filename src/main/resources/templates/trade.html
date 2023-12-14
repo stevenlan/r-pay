@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="common/css :: adminCss(ionicons='ionicons')"></head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+
+    <!-- Preloader -->
+    <div th:replace="common/plus :: preloader"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="common/plus :: navTop"></nav>
+
+    <!-- Main Sidebar Container -->
+    <aside th:replace="common/plus :: mainSidebar('trade')"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0" th:text="#{broker.trade.tagName}">Trade</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#" th:text="#{common.home}">Home</a></li>
+                            <li class="breadcrumb-item active" th:text="#{broker.trade.tagName}">Trade</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Info boxes -->
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h4>$ 0</h4>
+                                <p th:text="#{trade.profit.7days}">Profit 7Days</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <!--a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a-->
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h4>$ 0</h4>
+                                <p th:text="#{trade.profit.30days}">Profit 30Days</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h4>$ 0</h4>
+                                <p th:text="#{trade.sale.7days}">Sales 7Days</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-pink">
+                            <div class="inner">
+                                <h4>$ 0</h4>
+                                <p th:text="#{trade.sale.30days}">Sales 30Days</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- Main row -->
+                <div class="row">
+                    <div class="card">
+                        <form>
+                            <div class="card-header">
+                                <div class="col-lg-5 btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-info  active">
+                                        <input type="radio" name="options" id="option_a1" autocomplete="off" value="1" checked> <span th:text="#{trade.filter.today}">Today</span>
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option_a2" autocomplete="off" value="7"> <span th:text="#{trade.filter.7days}">7Days</span>
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option_a3" autocomplete="off" value="30"> <span th:text="#{trade.filter.30days}">30Days</span>
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option_a4" autocomplete="off" value="-1"> <span th:text="#{trade.filter.all}">All</span>
+                                    </label>
+                                </div>
+                                <div shiro:hasRole="admin" class="col-lg-2 btn-group btn-group-toggle float-right">
+                                    <button type="button" class="btn btn-success"><i class="far fa-credit-card"></i> <span th:text="#{trade.add}">Add Order</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div id="jsGrid1"></div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer th:replace="common/plus :: adminFooter"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- overlayScrollbars -->
+<script th:src="@{/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<!-- jsGrid -->
+<script shiro:hasRole="user" th:src="@{/assets/js/trade.js}"></script>
+<script shiro:hasRole="admin" th:src="@{/assets/js/tradeAdmin.js}"></script>
+<script th:src="@{/assets/plugins/jsgrid/jsgrid.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.js}"></script>
+
+<!-- PAGE PLUGINS -->
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $("form input").on("change",function(e){
+      let g = $("#jsGrid1").data().JSGrid ;
+      pageLoad(g.pageIndex,g.pageSize) ;
+    });
+    function loadPage(args){
+      let g = args.grid ;
+      pageLoad(g.pageIndex,g.pageSize) ;
+    }
+    $("#jsGrid1").jsGrid({
+
+        height: "100%",
+        width: "100%",
+
+        paging: true,
+        pageLoading: true,
+        pageSize: 15,
+        onPageChanged: loadPage,
+
+        fields: t_f
+    });
+
+    $("button.btn-success").on("click",function(e){
+      location.replace('/trade/add');
+    });
+
+    function pageLoad(no,pageSize) {
+      $.post("/trade/orders",{
+        options: $("form input[name='options']").val(),
+        current: no ? no : 1,
+        size: pageSize ? pageSize : 15
+      },renderPage);
+    }
+
+    function renderPage(res,status) {
+      let g = $("#jsGrid1").data().JSGrid ;
+      g.data = res.data.records ;
+      g._loadStrategy._itemsCount = res.data.total;
+      g.render();
+      if ( g.pageSize >= res.data.total ) {
+        setTimeout(() => {
+          $("div.jsgrid-grid-body")[0].style.height = "auto" ;
+        }, 100);
+      }
+      if (!res.data.records || res.data.records.length == 0) {
+        $("div.jsgrid-grid-body td.jsgrid-cell")[0].style.background = "#fff0" ;
+      }
+    }
+    pageLoad(1,15);
+  });
+</script>
+</body>
+</html>

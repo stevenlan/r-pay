@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css :: loginCss"></head>
+<body class="hold-transition register-page">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <div class="register-box" style="width: 500px;">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <div class="user-block">
+                    <img class="img-circle" th:src="@{/assets/dist/img/avatar5.png}" alt="User Image">
+                    <span class="username" th:text="${user.email}">Individual</span>
+                    <span class="description" th:text="${user.kycType}">1@2.c</span>
+                </div>
+            </div>
+            <form id="indivForm" action="saveInd" method="post">
+                <input type="hidden" class="form-control" name="userId" th:value="${user.id}">
+                <div class="card-body">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Basic Information (Individual)</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>First Name / 名</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="First Name" name="firstName" th:value="${info?.firstName}">
+                            </div>
+                            <label>Last Name / 姓</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" th:value="${info?.lastName}">
+                            </div>
+                            <label>Email Address / 邮箱地址</label>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Email" name="email" th:value="${info?.email}">
+                            </div>
+                            <label>Phone Number (include all country and area codes) / 电话号码（包括所有国家和地区代码）</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Phone Number" name="phone" th:value="${info?.phone}">
+                            </div>
+                            <label>Residential Address – Street Address (must match with address proof to be submitted) / 居住地址 (需和提交的资 料一致)</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" placeholder="Residential Address..." name="resAddress" th:text="${info?.resAddress}"></textarea>
+                            </div>
+                            <label>Citizenship (must match with passport scans to be submitted below) / 国籍（需和护照一致）</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Citizenship" name="citizenship" th:value="${info?.citizenship}">
+                            </div>
+                            <label>Date of Birth (must match with DOB in passport scans to be submitted below) / 出生日期（需和护照一致）</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Date of Birth" name="birth" th:value="${info?.birth}">
+                            </div>
+                            <label>Please provide a personal biography (including your present and past occupations) or a link to your LinkedIn profile / 个人自传（包含现在和过去职 业）或提供领英账号</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" placeholder="LinkedIn profile..." name="profile" th:text="${info?.profile}"></textarea>
+                            </div>
+                            <label>What are your primary sources of income and wealth? / 收入和财富的主 要来源？</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Sources..." name="sources" th:value="${info?.sources}">
+                            </div>
+                            <label>Are you a public figure, politician or embassy or consulate employee, or related to any public figure, politician or embassy or consulate employee? / 您 是公众人物，政治家，外交官，或与 此相关吗？</label>
+                            <div class="input-group mb-3">
+                                <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="publicFigure1" name="publicFigure" value="Yes" th:checked="${info?.publicFigure == 'Yes'}">
+                                        <label for="publicFigure1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="publicFigure2" name="publicFigure" value="No" th:checked="${info?.publicFigure == 'No'}">
+                                        <label for="publicFigure2">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>Have you ever done business in, spent significant time in or otherwise had significant contact with Belarus, Burundi, Central African Republic, Cuba, D.R. Congo, Iran, Iraq, Libya, North Korea, Russia, Somalia, Syria, South Sudan, Venezuela, Yemen or Zimbabwe? / 您过去有否和白俄罗斯， 布隆迪，中非共和国，古巴，DR 刚果， 伊朗，伊拉克，利比亚，朝鲜，俄罗 斯，索马里，叙利亚，南苏丹，委内 瑞 拉，也门或津巴布韦做过生意或资往 来？</label>
+                            <div class="input-group mb-3">
+                                <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="somalia1" name="somalia" value="Yes" th:checked="${info?.somalia == 'Yes'}">
+                                        <label for="somalia1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" id="somalia2" name="somalia" value="No" th:checked="${info?.somalia == 'No'}">
+                                        <label for="somalia2">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Banking Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Bank Name / 银行名字</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Name / 银行名字" name="bankName" th:value="${bank?.bankName}">
+                            </div>
+                            <label>Bank Address / 银行地址</label>
+                            <div class="input-group mb-3">
+                                <textarea class="form-control" placeholder="Bank Address..." name="bankAddress" th:text="${bank?.bankAddress}"></textarea>
+                            </div>
+                            <label>Bank Country / 银行所在国家</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Country" name="bankCountry" th:value="${bank?.bankCountry}">
+                            </div>
+                            <label>Beneficiary Name / 收款人名称</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Bank Country" name="beneficiaryName" th:value="${bank?.beneficiaryName}">
+                            </div>
+                            <label>Account Number / 银行账户</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Account Number" name="accountNumber" th:value="${bank?.accountNumber}">
+                            </div>
+                            <label>Beneficiary Address / 收款人地址</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Beneficiary Address" name="beneficiaryAddress" th:value="${bank?.beneficiaryAddress}">
+                            </div>
+                            <label>SWIFT or Routing Number/ABA (Please provide ABA if it is a bank in U.S. otherwise provide SWIFT / 如果是美国的银行, 请提供 ABA; 如果不是请提供 SWIFT)</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="SWIFT or Routing Number/ABA" name="soa" th:value="${bank?.soa}">
+                            </div>
+                            <label>I hereby certify that: <br>• I am applying for an account with LuBlock Technology Limited in my own name and on my own account, and not as a fiduciary or agent of any kind on behalf of a third party; and <br>• all information and materials provided in connection with this form are true, correct, accurate and complete to the best of my knowledge.
+                                <br>• Signature: Name , Date / 您的确认签名及签署日期照片</label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.signaturePath == null ? 'display:none;':''}" id="signatureInfo">
+                                    <span id="signatureName"><i class="far fa-fw fa-file-word"></i> Signature</span><button opt="signature" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="signatureItem" th:style="${att?.signaturePath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="signaturePath" id="signaturePath" th:value="${att?.signaturePath}">
+                                        <input type="file" class="custom-file-input" id="signature" name="signature">
+                                        <label class="custom-file-label" for="signature">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                    For example :<br>
+                                    <div class="position-relative">
+                                        <a data-toggle="dropdown" href="#"><img th:src="@{/assets/dist/img/sign.png}" alt="Photo 1" class="img-fluid" style="max-width: 271px;"></a>
+                                        <div class="dropdown-menu dropdown-menu-right p-0">
+                                            <img th:src="@{/assets/dist/img/sign.png}" alt="Photo 1" class="img-fluid" style="max-width: 450px;">
+                                        </div>
+                                        <div class="ribbon-wrapper">
+                                            <div class="ribbon bg-info">
+                                                Example
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">Documents Required</h3>
+                        </div>
+                        <div class="card-body">
+                            <label>Please provide the following documents and send to us within the onboarding form: 请提供下列文件, 并和申请表一起提交 <br>• Passport / 护照
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.passportPath == null ? 'display:none;':''}" id="passportInfo">
+                                    <span id="passportName"><i class="far fa-fw fa-file-word"></i> Passport</span><button opt="passport" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="passportItem" th:style="${att?.passportPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="passportPath" id="passportPath" th:value="${att?.passportPath}">
+                                        <input type="file" class="custom-file-input" id="passport" name="passport">
+                                        <label class="custom-file-label" for="passport">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <label>• Proof of Address within 3 months / 日期三个月内的地址证明文件</label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.poaPath == null ? 'display:none;':''}" id="poaInfo">
+                                    <span id="poaName"><i class="far fa-fw fa-file-word"></i> Proof of Address</span><button opt="poa" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="poaItem" th:style="${att?.poaPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="poaPath" id="poaPath" th:value="${att?.poaPath}">
+                                        <input type="file" class="custom-file-input" id="poa" name="poa">
+                                        <label class="custom-file-label" for="poa">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <label>• Source of Funds / 资金来源证明文件</label>
+                            <div class="input-group mb-3">
+                                <div class="row" th:style="${att?.sofPath == null ? 'display:none;':''}" id="sofInfo">
+                                    <span id="sofName"><i class="far fa-fw fa-file-word"></i> Source of Funds</span><button opt="sof" type="button" class="btn btn-sm btn-warning" style="margin-left: 8px;">Cancel</button>
+                                </div>
+                                <div class="form-group" id="sofItem" th:style="${att?.sofPath == null ? '':'display:none;'}">
+                                    <div class="input-group mb-3">
+                                        <input type="hidden" name="sofPath" id="sofPath" th:value="${att?.sofPath}">
+                                        <input type="file" class="custom-file-input" id="sof" name="sof">
+                                        <label class="custom-file-label" for="sof">Add file</label>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <input type="hidden" name="InviteCode" value="">
+            </form>
+        </div>
+    </div>
+    <div id="toastsContainerTopRight" class="toasts-bottom-right fixed" style="width: 400px;">
+        <div class="card card-outline card-danger">
+            <div class="card-header">
+                <h3 class="card-title text-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Failure Reason:
+                </h3>
+                <div class="card-tools">
+                    <span title="New Messages" class="badge bg-danger">i</span>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <p th:text="${kyc?.reason}">some error.</p>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- jquery-validation -->
+<script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.min.js}"></script>
+
+<script>
+$(function () {
+  var uploading = false;
+  function updateFile(event) {
+    if(uploading){
+        alert("文件正在上传中，请稍候");
+        return false;
+    }
+    /*
+    let name = event.currentTarget.files[0].name ;
+    elementId = event.currentTarget.id ;
+    $("#"+elementId+"Name")[0].innerHTML = '<i class="far fa-fw fa-file-word"></i>'+name ;
+    $("#"+elementId)[0].value = null ;
+    $("#"+elementId+"Item")[0].style.display = "none" ;
+    $("#"+elementId+"Info")[0].style.display = "" ;
+    */
+    var formData = new FormData();
+    formData.append("file",event.currentTarget.files[0]) ;
+    $.ajax({
+        url: "file/upload",
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        xhr: function () {
+          //获取xmlhttprequest对象或者ActiveXObject 对象，jquery中封装好的。
+          var xhr = $.ajaxSettings.xhr();
+          if ( xhr.upload) {
+            xhr.upload.addEventListener( "progress", function(evt) {
+                let elementId = event.currentTarget.id ;
+                let rate = $("#"+elementId+"Item span") ;
+                let bar = $("#"+elementId+"Item div.progress-bar") ;
+                console.log(elementId) ;
+                var loaded = evt.loaded; //已经上传大小情况
+                var tot = evt.total; //附件总大小
+                var per = Math.floor( 100 * loaded / tot); //已经上传的百分比
+                rate.html(per+"%") ;
+                bar.width(per+"%") ;}, false);
+          }
+          return xhr;
+        },
+        success : function(data) {
+            if (data.code == 200) {
+                let name = event.currentTarget.files[0].name ;
+                let elementId = event.currentTarget.id ;
+
+                $("#"+elementId+"Path")[0].value = data.data[0] ;
+                $("#"+elementId+"Name")[0].innerHTML = '<i class="far fa-fw fa-file-word"></i>'+name ;
+                $("#"+elementId)[0].value = null ;
+                $("#"+elementId+"Item")[0].style.display = "none" ;
+                $("#"+elementId+"Info")[0].style.display = "" ;
+                event.currentTarget.value = null ;
+            } else {
+                event.currentTarget.value = null ;
+                alert(data.msg);
+            }
+            uploading = false;
+        }
+    });
+  }
+  $(".btn-warning").on("click",function(event){
+    let eId = event.currentTarget.attributes["opt"].value ;
+    let rate = $("#"+eId+"Item span") ;
+    let bar = $("#"+eId+"Item div.progress-bar") ;
+    rate.html("0%") ;
+    bar.width("0%") ;
+    $("#"+eId+"Item")[0].style.display = "" ;
+    $("#"+eId+"Info")[0].style.display = "none" ;
+  }) ;
+  $("#signature").on("change", updateFile);
+  $("#passport").on("change", updateFile);
+  $("#poa").on("change", updateFile);
+  $("#sof").on("change", updateFile);
+  $.validator.setDefaults({
+    submitHandler: function () {
+      if(uploading){
+        return false;
+      }
+      $.ajax({
+        url: "saveInd",
+        type: 'POST',
+        cache: false,
+        data: new FormData($('#indivForm')[0]),
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        success : function(data) {
+            if (data.code == 200) {
+                location.replace('/');
+            } else {
+                alert(data.msg);
+            }
+            uploading = false;
+        }
+      });
+    }
+  });
+  $('#indivForm').validate({
+    rules: {
+      email: {
+        required: true,
+        email: true,
+      },
+      firstName: {
+        required: true
+      },
+      lastName: {
+        required: true
+      },
+      phone: {
+        required: true
+      },
+      resAddress: {
+        required: true
+      },
+      citizenship: {
+        required: true
+      },
+      birth: {
+        required: true
+      },
+      profile: {
+        required: true
+      },
+      sources: {
+        required: true
+      },
+      publicFigure: {
+        required: true,
+      },
+      somalia: {
+        required: true,
+      },
+      bankName: {
+        required: true,
+      },
+      bankAddress: {
+        required: true,
+      },
+      bankCountry: {
+        required: true,
+      },
+      beneficiaryName: {
+        required: true,
+      },
+      accountNumber: {
+        required: true,
+      },
+      beneficiaryAddress: {
+        required: true,
+      },
+      soa: {
+        required: true,
+      },
+      signature: {
+        required: true,
+      },
+      passport: {
+        required: true,
+      },
+      poa: {
+        required: true,
+      },
+      sof: {
+        required: true,
+      }
+    },
+    messages: {
+      email: {
+        required: "Please enter a email address",
+        email: "Please enter a valid email address"
+      }
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.input-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="common/css :: adminCss"></head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+
+    <!-- Preloader -->
+    <div th:replace="common/plus :: preloader"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="common/plus :: navTop"></nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside th:replace="common/plus :: mainSidebar('user')"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div th:replace="common/broker :: headerTitle"></div>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div th:replace="common/broker :: boxes('clients')"></div>
+                <!-- Main row -->
+                <div class="row">
+                    <div class="card">
+                        <form>
+                            <div class="card-header">
+                                <div class="col-lg-5 btn-group btn-group-toggle float-right" data-toggle="buttons">
+                                    <label class="btn btn-info  active">
+                                        <input type="radio" name="options" id="option_a1" autocomplete="off" value="0" checked> Pending
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option_a2" autocomplete="off" value="1"> Approved
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option_a3" autocomplete="off" value="2"> Rejected
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div id="jsGrid1"></div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer th:replace="common/plus :: adminFooter"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/assets/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- overlayScrollbars -->
+<script th:src="@{/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<!-- jsGrid -->
+<script th:src="@{/assets/plugins/jsgrid/jsgrid.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/assets/dist/js/adminlte.js}"></script>
+<script shiro:hasRole="user">
+    var c_f = [
+    { name: "modifiedTime", title: "Application time", type: "text", width: 150 },
+    { name: "email", title: "Email", type: "text", width: 100 },
+    { name: "from", title: "From", type: "text", width: 100 },
+    { name: "kycType", type: "text", title: "Type", width: 50 },
+    { name: "nickName", type: "text", title : "Name", width: 100 }] ,
+ a_f = [
+    { name: "email", title: "Email", type: "text", width: 150 },
+    { name: "from", title: "From", type: "text", width: 100 },
+    { name: "nickName", type: "text", title : "Name", width: 100 },
+    { name: "kycType", type: "text", title: "Type", width: 50 },
+    { name: "modifiedTime", title: "Approved Time", type: "text", width: 150 }] ,
+ r_f =[
+    { name: "email", title: "Email", type: "text", width: 100 },
+    { name: "from", title: "From", type: "text", width: 100 },
+    { name: "nickName", type: "text", title : "Name", width: 100 },
+    { name: "kycType", type: "text", title: "Type", width: 50 },
+    { name: "modifiedTime", title: "Rejected Time", type: "text", width: 150 },
+    { name: "reason", type: "text", title: "Reason", width: 100 }] ;
+</script>
+<script shiro:hasRole="admin">
+    var c_f = [
+            { name: "modifiedTime", title: "Application time", type: "text", width: 150 },
+            { name: "email", title: "Email", type: "text", width: 100 },
+            { name: "from", title: "From", type: "text", width: 100 },
+            { name: "kycType", type: "text", title: "Type", width: 50 },
+            { name: "nickName", type: "text", title : "Name", width: 100 },
+            {type: "control", itemTemplate: function(value, item) {
+              //var $result = $([]);
+              var input = $("<input>").addClass("jsgrid-button").addClass("jsgrid-edit-button")
+              .attr({
+                type: "button",
+                title: "approve"
+              })
+              .on("click", function(e) {
+                //approve
+                location.replace('/user/approve?userId='+item.id);
+              });
+              return input ;
+             }}],
+    a_f = [
+        { name: "email", title: "Email", type: "text", width: 150 },
+        { name: "from", title: "From", type: "text", width: 100 },
+        { name: "nickName", type: "text", title : "Name", width: 100 },
+        { name: "kycType", type: "text", title: "Type", width: 50 },
+        { name: "modifiedTime", title: "Approved Time", type: "text", width: 150 }] ,
+     r_f =[
+        { name: "email", title: "Email", type: "text", width: 100 },
+        { name: "from", title: "From", type: "text", width: 100 },
+        { name: "nickName", type: "text", title : "Name", width: 100 },
+        { name: "kycType", type: "text", title: "Type", width: 50 },
+        { name: "modifiedTime", title: "Rejected Time", type: "text", width: 150 },
+        { name: "reason", type: "text", title: "Reason", width: 100 }] ;
+</script>
+<!-- PAGE PLUGINS -->
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $("form input").on("change",function(e){
+      let g = $("#jsGrid1").data().JSGrid ;
+      if ( e.currentTarget.value == "0" ) {
+        initG(c_f) ;
+      } else if ( e.currentTarget.value == "1" ) {
+        initG(a_f) ;
+      } else {
+        initG(r_f) ;
+      }
+      pageLoad(g.pageIndex,g.pageSize) ;
+    });
+    function loadPage(args){
+      let g = args.grid ;
+      pageLoad(pageIndex,g.pageSize) ;
+      // g.data = db.clients ;
+      // g._loadStrategy._itemsCount = 100;
+      // g.render();
+    }
+
+    function initG(f) {
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        paging: true,
+        pageLoading: true,
+        pageSize: 15,
+        onPageChanged: loadPage,
+        fields: f
+      });
+    }
+
+    function pageLoad(no,pageSize) {
+      $.post("/user/approveUsers",{
+        options: $("form")[0]["options"].value,
+        current: no ? no : 1,
+        size: pageSize ? pageSize : 15
+      },renderPage);
+    }
+
+    function renderPage(res,status) {
+      console.log(res) ;
+      let g = $("#jsGrid1").data().JSGrid ;
+      g.data = res.data.records ;
+      g._loadStrategy._itemsCount = res.data.total;
+      g.render();
+      if ( g.pageSize >= res.data.total ) {
+        setTimeout(() => {
+          $("div.jsgrid-grid-body")[0].style.height = "auto" ;
+        }, 100);
+      }
+      if (!res.data.records || res.data.records.length == 0) {
+        $("div.jsgrid-grid-body td.jsgrid-cell")[0].style.background = "#fff0" ;
+      }
+    }
+    initG(c_f) ;
+    pageLoad(1,15) ;
+  });
+</script>
+</body>
+</html>
