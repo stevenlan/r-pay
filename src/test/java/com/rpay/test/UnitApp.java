@@ -51,9 +51,9 @@ public class UnitApp {
         Assert.assertNotNull(f);
         Assert.assertEquals(f.getName(),"fdfs_client.conf");
 
-        Properties p = new Properties() ;
-        p.load(new FileInputStream(f));
-        ClientGlobal.initByProperties(p);
+        //Properties p = new Properties() ;
+        //p.load(new FileInputStream(f));
+        //ClientGlobal.initByProperties(p);
 
         TrackerClient tracker = new TrackerClient();
         TrackerServer trackerServer = tracker.getTrackerServer() ;
@@ -65,6 +65,7 @@ public class UnitApp {
                 new NameValuePair("sex", "male")
         };
         String fileIds[] = storageClient.upload_file(f.getPath(), "conf", nvp);
+        //String fileIds[] = storageClient.upload_file("group1","fdfs_client","M00",f.getPath(), "conf", nvp);
 
         Assert.assertNotNull(fileIds);
         //Assert.assertEquals(fileIds.length,2);

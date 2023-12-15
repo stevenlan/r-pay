@@ -196,7 +196,7 @@
         <dependency>
             <groupId>io.github.rui8832</groupId>
             <artifactId>fastdfs-client-java</artifactId>
-            <version>1.30-20230328</version>
+            <version>1.29-20211022</version>
         </dependency>
 
         <!--swagger-->
