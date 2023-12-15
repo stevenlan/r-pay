@@ -82,7 +82,6 @@ public class TrackerClient {
             }
 
             String ip_addr = (new String(pkgInfo.body, 16, 15)).trim();
-            String tmpIp = trackerServer.getInetSocketAddress().getAddress().getHostAddress() ;
             int port = (int)ProtoCommon.buff2long(pkgInfo.body, 31);
             if ( port == 0 ) {
                 port = 23000 ;
@@ -185,6 +184,9 @@ public class TrackerClient {
                     String ip_addr = (new String(pkgInfo.body, offset, 15)).trim();
                     offset += 15;
                     int port = (int)ProtoCommon.buff2long(pkgInfo.body, offset);
+                    if ( port == 0 ) {
+                        port = 23000 ;
+                    }
                     offset += 8;
                     results[i] = new StorageServer(ip_addr, port, store_path);
                 }
@@ -279,6 +281,9 @@ public class TrackerClient {
                 String ip_addr = (new String(pkgInfo.body, 16, 15)).trim();
                 int offset = 31;
                 int port = (int)ProtoCommon.buff2long(pkgInfo.body, offset);
+                if ( port == 0 ) {
+                    port = 23000 ;
+                }
                 offset = offset + 8;
                 ServerInfo[] servers = new ServerInfo[server_count];
                 servers[0] = new ServerInfo(ip_addr, port);
