@@ -74,7 +74,7 @@ public class TrackerClient {
                 out.write(bGroupName);
             }
 
-            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, 40L);
+            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, 70L);
             this.errno = pkgInfo.errno;
             if (pkgInfo.errno != 0) {
                 var35 = null;
@@ -82,6 +82,7 @@ public class TrackerClient {
             }
 
             String ip_addr = (new String(pkgInfo.body, 16, 15)).trim();
+            String tmpIp = trackerServer.getInetSocketAddress().getAddress().getHostAddress() ;
             int port = (int)ProtoCommon.buff2long(pkgInfo.body, 31);
             if ( port == 0 ) {
                 port = 23000 ;

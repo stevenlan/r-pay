@@ -135,7 +135,7 @@ public class ProtoCommon {
             long pkg_len = buff2long(header, 0);
             if (pkg_len < 0L) {
                 throw new IOException("recv body length: " + pkg_len + " < 0!");
-            } else if (expect_body_len >= 0L && pkg_len != 70) {
+            } else if (expect_body_len >= 0L && pkg_len != expect_body_len) {
                 throw new IOException("recv body length: " + pkg_len + " is not correct, expect length: " + expect_body_len);
             } else {
                 return new ProtoCommon.RecvHeaderInfo((byte)0, pkg_len);
