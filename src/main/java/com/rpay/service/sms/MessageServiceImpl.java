@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public void sendMailForHtml(String title, String content, String mail) {
-        MailUtil.send(mail,title,content, false) ;
+        MailUtil.send(mail,title,content, true) ;
     }
 
     @Override

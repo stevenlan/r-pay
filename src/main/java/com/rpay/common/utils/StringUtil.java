@@ -79,6 +79,8 @@ public class StringUtil {
     public static void main(String[] args) {
         //MailUtil.send("ads_1233221@163.com","这是验证码提醒邮件",FileUtil.buildContent("hiuhuhg52","config/templates/checkCode.ftl"), true) ;
         String content = FileUtil.readContent("config/templates/checkCode.ftl") ;
-        System.out.println(MessageFormat.format(content, "code","time"));
+        //System.out.println(MessageFormat.format(content, "code","time"));
+
+        MailUtil.send("bluesteve668@gmail.com","这是验证码提醒邮件",MessageFormat.format(content, "tj5h5","20"), true) ;
     }
 }
