@@ -141,6 +141,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaUpdateChainWrapper<User> up = new LambdaUpdateChainWrapper<>(this.baseMapper) ;
         up.set(User::getEmail, email) ;
         up.eq(User::getId,userId) ;
+
+        up.update() ;
     }
 
     @Override
