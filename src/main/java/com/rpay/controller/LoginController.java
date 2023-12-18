@@ -214,6 +214,23 @@ public class LoginController extends BaseController {
         return R.succeed("操作成功") ;
     }
 
+    @ApiOperation(value = "设置支付密码")
+    @PostMapping("/api/resetEmail")
+    @ResponseBody
+    public R resetEmail(HttpServletRequest request, @Valid @RequestBody Password password) {
+        String mailCode = (String)request.getSession().getAttribute("MailCode") ;
+        String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
+        if ( !StringUtils.equalsIgnoreCase(mailCode, password.getCheckCode())
+                && !StringUtils.equalsIgnoreCase(phoneCode, password.getCheckCode()) ) {
+            return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+        }
+        request.getSession().removeAttribute("MailCode");
+        request.getSession().removeAttribute("PhoneCode");
+
+        userService.resetEmail(getLoginUserId(), password.getEmail());
+        return R.succeed("操作成功") ;
+    }
+
     @ApiOperation(value = "获取当前登录用户信息")
     @GetMapping("/api/getCur")
     @ResponseBody

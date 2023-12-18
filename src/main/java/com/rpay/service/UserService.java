@@ -35,14 +35,6 @@ public interface UserService extends IService<User> {
     boolean isAdmin(User user) ;
 
     /**
-     * 发送邮件给指定的用户
-     * @param context 发送内容
-     * @param mail 目标邮箱
-     * @param title 标题
-     */
-    void sendMail(String title ,String context, String mail) ;
-
-    /**
      * 生成验证码并发送邮件
      * @param mail 邮箱地址
      * @param code 验证码
@@ -71,6 +63,13 @@ public interface UserService extends IService<User> {
      * @param pass 新密码
      */
     void setPayPass(Long userId, String oldPass, String pass) ;
+
+    /**
+     * 设置支付密码
+     * @param userId 用户id
+     * @param email 新邮箱
+     */
+    void resetEmail(Long userId, String email) ;
 
     /**
      * 激活用户状态

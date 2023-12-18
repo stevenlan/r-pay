@@ -6,13 +6,11 @@ import com.rpay.model.FilePojo;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.csource.common.NameValuePair;
-import org.csource.fastdfs.ClientGlobal;
-import org.csource.fastdfs.StorageClient1;
-import org.csource.fastdfs.TrackerClient;
-import org.csource.fastdfs.TrackerServer;
+import org.csource.fastdfs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,11 +30,13 @@ public class FastDfsTemplate implements InitializingBean {
 
     @Resource
     private FsServerProperties fileProperties;
+    @Value("${fs.expectBodyLen}")
+    private Long expectBodyLen ;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         ClientGlobal.initByProperties(fileProperties.getFds());
-
+        ProtoCommon.ExpectBodyLen = expectBodyLen ;
         logger.info("conf success! conf: classpath:fdfs_client.conf");
     }
 

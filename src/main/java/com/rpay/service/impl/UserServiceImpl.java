@@ -17,6 +17,7 @@ import com.rpay.model.Role;
 import com.rpay.model.User;
 import com.rpay.model.UserRole;
 import com.rpay.service.UserService;
+import com.rpay.service.sms.MessageService;
 import com.wf.captcha.SpecCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserRoleMapper userRoleMapper;
 
     private final RoleMapper roleMapper;
+
+    private final MessageService messageService ;
 
     @Override
     public boolean addUser(User user) {
@@ -86,14 +89,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void sendMail(String title ,String context, String mail) {
-        MailUtil.send(mail,title,context, false) ;
-    }
-
-    @Override
     public void mailCheckCode(String mail, String code) {
-        String context = "尊敬的用户您好，这是您本次收到的邮箱验证码，请尽快复制并输入，有效期半小时，验证码为："+ code ;
-        sendMail("感谢您的使用，请查看验证码",context,mail) ;
+        messageService.sendMail("感谢您的使用ReliancePay，请查看邮箱验证码",code,"30分钟", mail) ;
     }
 
     @Override
@@ -137,6 +134,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         up.eq(User::getId,userId) ;
 
         up.update() ;
+    }
+
+    @Override
+    public void resetEmail(Long userId, String email) {
+        LambdaUpdateChainWrapper<User> up = new LambdaUpdateChainWrapper<>(this.baseMapper) ;
+        up.set(User::getEmail, email) ;
+        up.eq(User::getId,userId) ;
     }
 
     @Override

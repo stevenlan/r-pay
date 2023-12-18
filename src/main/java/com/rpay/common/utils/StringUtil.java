@@ -1,5 +1,9 @@
 package com.rpay.common.utils;
 
+import cn.hutool.extra.mail.MailUtil;
+
+import java.text.MessageFormat;
+
 /**
  * 字符串工具类
  */
@@ -72,4 +76,9 @@ public class StringUtil {
         return out;
     }
 
+    public static void main(String[] args) {
+        //MailUtil.send("ads_1233221@163.com","这是验证码提醒邮件",FileUtil.buildContent("hiuhuhg52","config/templates/checkCode.ftl"), true) ;
+        String content = FileUtil.readContent("config/templates/checkCode.ftl") ;
+        System.out.println(MessageFormat.format(content, "code","time"));
+    }
 }

@@ -74,7 +74,7 @@ public class TrackerClient {
                 out.write(bGroupName);
             }
 
-            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, 70L);
+            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, ProtoCommon.ExpectBodyLen);
             this.errno = pkgInfo.errno;
             if (pkgInfo.errno != 0) {
                 var35 = null;

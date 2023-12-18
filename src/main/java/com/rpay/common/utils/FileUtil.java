@@ -3,15 +3,20 @@ package com.rpay.common.utils;
 import com.rpay.common.constant.CommonConstant;
 import com.rpay.common.exception.BusinessException;
 import com.rpay.model.FilePojo;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -204,5 +209,40 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String readContent(String path) {
+        //加载邮件html模板
+        Resource resource = new ClassPathResource(path);
+        InputStream inputStream = null;
+        BufferedReader fileReader = null;
+        StringBuffer buffer = new StringBuffer();
+        String line = "";
+        try {
+            inputStream = resource.getInputStream();
+            fileReader = new BufferedReader(new InputStreamReader(inputStream));
+            while ((line = fileReader.readLine()) != null) {
+                buffer.append(line);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //替换html模板中的参数
+        return buffer.toString();
     }
 }

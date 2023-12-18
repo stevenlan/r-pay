@@ -81,6 +81,7 @@ public class ProtoCommon {
     public static final long TRUNK_FILE_MARK_SIZE = 576460752303423488L;
     public static final long NORMAL_LOGIC_FILENAME_LENGTH = 44L;
     public static final long TRUNK_LOGIC_FILENAME_LENGTH = 60L;
+    public static long ExpectBodyLen ;
     protected static final int PROTO_HEADER_CMD_INDEX = 8;
     protected static final int PROTO_HEADER_STATUS_INDEX = 9;
 

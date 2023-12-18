@@ -963,7 +963,7 @@ public class StorageClient {
             System.arraycopy(groupBytes, 0, wholePkg, header.length, groupBytes.length);
             System.arraycopy(filenameBytes, 0, wholePkg, header.length + groupBytes.length, filenameBytes.length);
             out.write(wholePkg);
-            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, 70L);
+            RecvPackageInfo pkgInfo = ProtoCommon.recvPackage(connection.getInputStream(), (byte)100, ProtoCommon.ExpectBodyLen);
             this.errno = pkgInfo.errno;
             if (pkgInfo.errno == 0) {
                 long file_size = ProtoCommon.buff2long(pkgInfo.body, 0);

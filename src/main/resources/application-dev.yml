@@ -11,3 +11,4 @@ mybatis-plus:
 
 fs:
   isPreview: false
+  expectBodyLen: 40

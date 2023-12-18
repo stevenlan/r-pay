@@ -43,6 +43,7 @@ public class UnitApp {
     public void getList() {
         List<User> list = userService.list() ;
         logger.info(list.toString());
+        logger.info(ProtoCommon.ExpectBodyLen+"");
     }
 
     @Test

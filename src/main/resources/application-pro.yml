@@ -7,3 +7,4 @@ spring:
 
 fs:
   isPreview: false
+  expectBodyLen: 70
