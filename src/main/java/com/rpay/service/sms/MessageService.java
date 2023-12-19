@@ -15,6 +15,13 @@ public interface MessageService {
     void sendMail(String title ,String code, String time, String mail) ;
 
     /**
+     * 发送成功通知
+     * @param title
+     * @param mail
+     */
+    void sendPassMail(String title, String mail) ;
+
+    /**
      * 发送邮件
      * @param title 标题
      * @param content 邮件内容

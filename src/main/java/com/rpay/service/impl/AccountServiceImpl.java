@@ -16,6 +16,7 @@ import com.rpay.service.UserService;
 import com.rpay.service.query.BankQuery;
 import com.rpay.service.query.ExQuery;
 import com.rpay.service.query.KycQuery;
+import com.rpay.service.sms.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
     private ExchangeMapper exMapper ;
     @Autowired
     private UserService userService ;
+    @Autowired
+    private MessageService messageService ;
 
     @Override
     public boolean updateAccount(BankDetail bank) {
@@ -234,10 +237,6 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
 
     @Override
     public boolean passKyc(Long kycId, boolean pass, String reason) {
-        if ( pass ) {
-            KycCertification kyc = kycMapper.selectById(kycId) ;
-            userService.activeUser(kyc.getUserId()) ;
-        }
         LambdaUpdateChainWrapper<KycCertification> update = new LambdaUpdateChainWrapper<>(kycMapper) ;
 
         update.set(pass, KycCertification::getKycStatus,1) ;
@@ -245,7 +244,14 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
         update.set(!pass, KycCertification::getReason,reason) ;
 
         update.eq(KycCertification::getId,kycId) ;
-        return update.update() ;
+        boolean flag = update.update() ;
+        if ( pass && flag ) {
+            KycCertification kyc = kycMapper.selectById(kycId) ;
+            userService.activeUser(kyc.getUserId()) ;
+            User u = userService.getById(kyc.getUserId()) ;
+            messageService.sendPassMail("恭喜您，通过ReliancePay的审核！", u.getEmail()) ;
+        }
+        return flag ;
     }
 
     @Override

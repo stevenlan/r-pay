@@ -38,6 +38,12 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
+    public void sendPassMail(String title, String mail) {
+        String content = FileUtil.readContent("config/templates/pass.ftl") ;
+        sendMailForHtml(title,content,mail) ;
+    }
+
+    @Override
     public void sendMailForHtml(String title, String content, String mail) {
         MailUtil.send(mail,title,content, true) ;
     }
