@@ -47,9 +47,9 @@ public class CmsController extends BaseController {
     }
 
     @ApiOperation(value = "设置推荐")
-    @PostMapping("/api/cmsRecommend")
+    @GetMapping("/api/cmsRecommend")
     @ResponseBody
-    public R recommend(@RequestBody Boolean act, @RequestBody Long id){
+    public R recommend(Boolean act, Long id){
         if (cmsService.recSiteNews(id,act)) {
             return R.succeed("操作成功") ;
         }
