@@ -238,6 +238,13 @@ public class AccountController extends BaseController {
         return R.succeed(accountService.getCountries()) ;
     }
 
+    @ApiOperation(value = "获取国家列表")
+    @GetMapping("/api/allCoin")
+    @ResponseBody
+    public R<List<Countries>> allCoin() {
+        return R.succeed(accountService.getCoins()) ;
+    }
+
     @ApiOperation(value = "获取支持的加密货币列表")
     @GetMapping("/api/cryptocurrencies")
     @ResponseBody

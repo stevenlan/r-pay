@@ -132,6 +132,12 @@ public interface AccountService {
     List<Countries> getCountries() ;
 
     /**
+     * 获取全部货币列表
+     * @return
+     */
+    List<Countries> getCoins() ;
+
+    /**
      * 获取加密可选列表
      * @return
      */

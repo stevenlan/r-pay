@@ -261,6 +261,12 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
     }
 
     @Override
+    public List<Countries> getCoins() {
+        return countriesMapper.selectList(new QueryWrapper<Countries>().lambda()
+                .isNotNull(Countries::getCoinCode)) ;
+    }
+
+    @Override
     public List<Countries> getCrypts() {
         return countriesMapper.selectList(new QueryWrapper<Countries>().lambda().eq(Countries::getCoinType,2)) ;
     }
