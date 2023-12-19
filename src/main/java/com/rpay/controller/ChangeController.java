@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author steven
@@ -43,6 +44,13 @@ public class ChangeController extends BaseController implements SessionUtils {
     @ResponseBody
     public R<List<Countries>> targetCoin(@ApiParam(name = "source", value = "来源货币国家，可以是法币，也可以是数据货币,提交的是地区列表的code, 比如CN / US", required = true) String source){
         return R.succeed(exService.queryExTarget(source)) ;
+    }
+
+    @ApiOperation(value = "查询可兑换目标列表")
+    @GetMapping("/api/allCoins")
+    @ResponseBody
+    public R<Set<String>> allCoins(){
+        return R.succeed(exService.queryAllExCoin()) ;
     }
 
     //status:1

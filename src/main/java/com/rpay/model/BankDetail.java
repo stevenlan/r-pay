@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 银行账户信息
@@ -98,6 +99,9 @@ public class BankDetail extends Model<BankDetail> {
     @NotBlank(message = "开户银行地址不能为空")
     @Size(min = 6, max = 128,message = "开户银行地址不能超过128个英文长度")
     private String bankAdd ;
+
+    @TableField(exist = false)
+    private List<String> bindCoins ;
 
     /**
      * 证明材料，银行流水单据，银行月结单，户主护照等

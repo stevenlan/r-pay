@@ -242,6 +242,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
         }
         //汇兑划出了，取消后资金重新入账
         bill.setBillType(backType);
+        bill.setBillBack(1) ;
         bill.setId(null);
         bill.setCreateTime(null);
         bill.setModifiedTime(null);

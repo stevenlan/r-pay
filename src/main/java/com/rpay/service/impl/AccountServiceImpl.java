@@ -12,6 +12,7 @@ import com.rpay.mapper.ExchangeMapper;
 import com.rpay.mapper.KycCertificationMapper;
 import com.rpay.model.*;
 import com.rpay.service.AccountService;
+import com.rpay.service.ExchangeService;
 import com.rpay.service.UserService;
 import com.rpay.service.query.BankQuery;
 import com.rpay.service.query.ExQuery;
@@ -23,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.ListUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +49,8 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
     private UserService userService ;
     @Autowired
     private MessageService messageService ;
+    @Autowired
+    private ExchangeService exService ;
 
     @Override
     public boolean updateAccount(BankDetail bank) {
@@ -58,10 +63,12 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
             }
         }
         if ( null != bank.getId() ) {
-            return bankMapper.updateById(bank) > 0 ;
+            bankMapper.updateById(bank) ;
         } else {
-            return bankMapper.insert(bank) > 0 ;
+            bankMapper.insert(bank) ;
         }
+        exService.bindCoins(bank.getBindCoins(), bank.getId()) ;
+        return true ;
     }
 
     @Override
@@ -117,6 +124,19 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
         QueryWrapper<BankDetail> wra = renderBankQuery(query) ;
 
         return bankMapper.selectList(wra) ;
+    }
+
+    @Override
+    public List<BankDetail> coinBanks(String coin) {
+        List<Deposit> depList = exService.coinBankIds(coin) ;
+        if ( !ListUtils.isEmpty(depList) ) {
+            List<Long> ids = new ArrayList<>() ;
+            depList.forEach(dep -> {
+                ids.add(dep.getBankId()) ;
+            });
+            return bankMapper.selectList(new QueryWrapper<BankDetail>().lambda().in(BankDetail::getId,ids)) ;
+        }
+        return new ArrayList<>() ;
     }
 
     @Override
@@ -179,6 +199,7 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
             }
         }
         if ( null==userId || bank1.getUserId().equals(userId) ) {
+            exService.delBindCoins(bank.getId()) ;
             return bankMapper.deleteById(bank.getId()) > 0 ;
         }
         return false ;

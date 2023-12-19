@@ -25,6 +25,8 @@ public class BillDetail extends Model<BillDetail> {
      */
     @ApiParam(name = "billType", value = "", required = false)
     private Integer billType ;
+    @ApiParam(name = "billBack", value = "", required = false)
+    private Integer billBack ;
     /**
      * 账单货币
      */

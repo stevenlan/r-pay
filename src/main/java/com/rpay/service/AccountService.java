@@ -74,6 +74,13 @@ public interface AccountService {
     List<BankDetail> findBanks(BankQuery query) ;
 
     /**
+     * 获取支持货币的银行(用户端专用接口)
+     * @param coin
+     * @return
+     */
+    List<BankDetail> coinBanks(String coin) ;
+
+    /**
      * 查询指定银行账户信息
      * @param bankId 查询条件
      * @return

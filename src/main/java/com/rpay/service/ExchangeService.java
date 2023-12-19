@@ -5,6 +5,7 @@ import com.rpay.model.*;
 import com.rpay.service.query.CryAccQuery;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 汇率，收款银行账户及加密钱包地址设置
@@ -46,10 +47,30 @@ public interface ExchangeService {
     boolean updateDeposit(BankDetail dep) ;
 
     /**
+     * 删除银行和货币的绑定关系
+     * @param bankId
+     */
+    void delBindCoins(Long bankId) ;
+
+    /**
+     * 绑定银行和货币关联
+     * @param coins
+     * @param bankId
+     */
+    void bindCoins(List<String> coins, Long bankId) ;
+
+    /**
      * 获取收款银行账户列表
      * @return
      */
     List<Deposit> deposits() ;
+
+    /**
+     * 获取绑定货币的银行id
+     * @param coin
+     * @return
+     */
+    List<Deposit> coinBankIds(String coin) ;
 
     /**
      * 获取分页收款账户
@@ -112,4 +133,10 @@ public interface ExchangeService {
      * @return
      */
     List<Countries> queryExTarget(String fromCountry) ;
+
+    /**
+     * 获取所有支持使用的货币
+     * @return
+     */
+    Set<String> queryAllExCoin() ;
 }

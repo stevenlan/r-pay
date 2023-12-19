@@ -23,6 +23,13 @@ public interface CountriesMapper extends BaseMapper<Countries> {
 
     /**
      * 查询
+     * @return
+     */
+    @Select(value = "select * from sys_exchange e left join sys_countries c on e.`target_country` = c.`code`")
+    List<Countries> selectAllExTarget() ;
+
+    /**
+     * 查询
      * @param fromCountry 来源
      * @return
      */

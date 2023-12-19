@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.util.ListUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -143,6 +144,13 @@ public class AccountController extends BaseController {
         return R.succeed(banks) ;
     }
 
+    @ApiOperation(value = "获取用户指定货币绑定的银行账户列表")
+    @GetMapping("/api/coinBanks")
+    @ResponseBody
+    public R<List<BankDetail>> coinBanks(String coin) {
+        return R.succeed(accountService.coinBanks(coin)) ;
+    }
+
     @ApiOperation(value = "获取银行账户列表")
     @PostMapping("/api/bankPage")
     @ResponseBody
@@ -163,6 +171,9 @@ public class AccountController extends BaseController {
     public R subBank(HttpServletRequest request, @Valid @RequestBody BankDetail bank) {
         if ( StringUtils.isBlank(bank.getPayPass()) && StringUtils.isBlank(bank.getVerCode()) ) {
             return R.failed("请填写支付密码或者验证码");
+        }
+        if ( ListUtils.isEmpty(bank.getBindCoins()) ) {
+            return R.failed("请选择该银行账户支持的货币");
         }
         if ( StringUtils.isBlank(bank.getPayPass()) ) {
             //验证码校验，或者支付密码校验

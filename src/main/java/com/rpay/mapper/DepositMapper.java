@@ -27,7 +27,7 @@ public interface DepositMapper extends BaseMapper<Deposit> {
             "b.bank_status as `bank.bank_status`, b.reason as `bank.reason`," +
             "b.create_time as `bank.create_time`, b.modified_time as `bank.modified_time`" +
             " from sys_deposit d left join bank_detail b on d.`bank_id` = b.`id`where d.deposit_status = 1" +
-            " order by d.modified_time desc")
+            " and d.user_id = 1 order by d.modified_time desc")
     List<Deposit> queryList() ;
 
     /**

@@ -20,8 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.ListUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author steven
@@ -66,13 +69,16 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
     public boolean updateDeposit(BankDetail dep) {
         Deposit tmp = depMapper.selectOne(new QueryWrapper<Deposit>().lambda()
                 .eq(Deposit::getId,dep.getId()).or().eq(Deposit::getCoinCode,dep.getCoinCode())) ;
+
         if ( null == tmp ) {
+            Long userId = getLoginUserId() ;
             dep.setBankStatus(1) ;
             accService.updateAccount(dep) ;
             Deposit deposit = new Deposit() ;
             deposit.setCoinCode(dep.getCoinCode());
             deposit.setDepositStatus(1) ;
             deposit.setBankId(dep.getId()) ;
+            deposit.setUserId(userId) ;
             return depMapper.insert(deposit) > 0 ;
         } else {
             Deposit deposit = new Deposit() ;
@@ -89,8 +95,36 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void bindCoins(List<String> coins, Long bankId) {
+        delBindCoins(bankId) ;
+        Long userId = getLoginUserId() ;
+        coins.forEach(coin -> {
+            Deposit deposit = new Deposit() ;
+            deposit.setCoinCode(coin);
+            deposit.setDepositStatus(1) ;
+            deposit.setBankId(bankId) ;
+            deposit.setUserId(userId) ;
+
+            depMapper.insert(deposit) ;
+        });
+    }
+
+    @Override
+    public void delBindCoins(Long bankId) {
+        depMapper.delete(new QueryWrapper<Deposit>().lambda().eq(Deposit::getBankId,bankId)) ;
+    }
+
+    @Override
     public List<Deposit> deposits() {
         return depMapper.queryList() ;
+    }
+
+    @Override
+    public List<Deposit> coinBankIds(String coin) {
+        Long userId = getLoginUserId() ;
+        return depMapper.selectList(new QueryWrapper<Deposit>().lambda().eq(Deposit::getUserId,userId)
+                .eq(Deposit::getCoinCode, coin)) ;
     }
 
     @Override
@@ -183,5 +217,24 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
     @Override
     public List<Countries> queryExTarget(String fromCountry) {
         return countriesMapper.selectExTarget(fromCountry) ;
+    }
+
+    @Override
+    public Set<String> queryAllExCoin() {
+        Set<String> coins = new HashSet<>() ;
+        List<Countries> sources = queryExSource() ;
+        if (!ListUtils.isEmpty(sources)) {
+            sources.forEach(countries -> {
+                coins.add(countries.getCoinCode()) ;
+            });
+        }
+        List<Countries> targets = countriesMapper.selectAllExTarget() ;
+        if (!ListUtils.isEmpty(targets)) {
+            targets.forEach(countries -> {
+                coins.add(countries.getCoinCode()) ;
+            });
+        }
+
+        return coins ;
     }
 }

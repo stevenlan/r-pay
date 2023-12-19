@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -35,7 +36,8 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      * 申请出金额度
      */
     @ApiParam(name = "reqValue", value = "申请出金金额，必填", required = true)
-    @NotNull
+    @NotNull(message = "提款金额必填")
+    @Size(min = 10, message = "提款金额不能小于10USD的价值")
     private Double reqValue ;
     /**
      * 实际出金金额
