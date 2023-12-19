@@ -72,8 +72,7 @@ public class BankDetail extends Model<BankDetail> {
      * 银行代码
      */
     @ApiParam(name = "bankCode", value = "银行代码", required = true)
-    @NotBlank(message = "银行代码不能为空")
-    @Size(min = 2, max = 16, message = "请输入正确的银行代码")
+    //@Size(min = 2, max = 16, message = "请输入正确的银行代码")
     private String bankCode ;
 
     /**
