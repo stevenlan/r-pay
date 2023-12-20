@@ -73,6 +73,13 @@ public interface ExchangeService {
     List<Deposit> coinBankIds(String coin) ;
 
     /**
+     * 获取银行全部的绑定货币
+     * @param bankId
+     * @return
+     */
+    List<Deposit> bankCoins(Long bankId) ;
+
+    /**
      * 获取分页收款账户
      * @param query 分页条件
      * @return

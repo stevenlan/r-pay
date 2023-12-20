@@ -207,7 +207,14 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
 
     @Override
     public BankDetail findBank(Long bankId) {
-        return bankMapper.selectById(bankId) ;
+        BankDetail bank = bankMapper.selectById(bankId) ;
+        List<Deposit> dl = exService.bankCoins(bankId) ;
+        if ( !ListUtils.isEmpty(dl) ) {
+            List<String> coins = new ArrayList<>() ;
+            dl.forEach(deposit -> coins.add(deposit.getCoinCode())) ;
+            bank.setBindCoins(coins) ;
+        }
+        return bank ;
     }
 
     @Override

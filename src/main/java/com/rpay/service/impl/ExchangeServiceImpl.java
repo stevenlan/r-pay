@@ -128,6 +128,13 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
     }
 
     @Override
+    public List<Deposit> bankCoins(Long bankId) {
+        Long userId = getLoginUserId() ;
+        return depMapper.selectList(new QueryWrapper<Deposit>().lambda().eq(Deposit::getUserId,userId)
+                .eq(Deposit::getBankId, bankId)) ;
+    }
+
+    @Override
     public Page<Deposit> depositPage(Page<Deposit> query) {
         Integer count = depMapper.countQueryList() ;
         query.setTotal(count) ;
