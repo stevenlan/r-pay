@@ -232,13 +232,17 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
         List<Countries> sources = queryExSource() ;
         if (!ListUtils.isEmpty(sources)) {
             sources.forEach(countries -> {
-                coins.add(countries.getCoinCode()) ;
+                if ( countries.getCoinType() == 1 && StringUtils.isNotBlank(countries.getCoinCode())) {
+                    coins.add(countries.getCoinCode());
+                }
             });
         }
         List<Countries> targets = countriesMapper.selectAllExTarget() ;
         if (!ListUtils.isEmpty(targets)) {
             targets.forEach(countries -> {
-                coins.add(countries.getCoinCode()) ;
+                if ( countries.getCoinType() == 1 && StringUtils.isNotBlank(countries.getCoinCode()) ) {
+                    coins.add(countries.getCoinCode());
+                }
             });
         }
 
