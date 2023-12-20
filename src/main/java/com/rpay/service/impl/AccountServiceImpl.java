@@ -134,7 +134,8 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
             depList.forEach(dep -> {
                 ids.add(dep.getBankId()) ;
             });
-            return bankMapper.selectList(new QueryWrapper<BankDetail>().lambda().in(BankDetail::getId,ids)) ;
+            return bankMapper.selectList(new QueryWrapper<BankDetail>().lambda().in(BankDetail::getId,ids)
+                    .eq(BankDetail::getBankStatus,1)) ;
         }
         return new ArrayList<>() ;
     }
