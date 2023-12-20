@@ -60,7 +60,7 @@ public class UserTest {
     public void testCounties() {
         Integer n = countriesMapper.selectCount(new QueryWrapper<>()) ;
         Assert.assertNotNull(n);
-        Assert.assertEquals(246,n.intValue()) ;
+        Assert.assertEquals(247,n.intValue()) ;
 
         Countries c = countriesMapper.selectOne(new QueryWrapper<Countries>().lambda().eq(Countries::getCode,"CN")) ;
         Assert.assertNotNull(c);

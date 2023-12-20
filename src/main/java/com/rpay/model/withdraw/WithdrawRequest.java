@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,7 +38,7 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      */
     @ApiParam(name = "reqValue", value = "申请出金金额，必填", required = true)
     @NotNull(message = "提款金额必填")
-    @Size(min = 10, message = "提款金额不能小于10USD的价值")
+    @Min(value = 10, message = "提款金额不能小于10USD的价值")
     private Double reqValue ;
     /**
      * 实际出金金额

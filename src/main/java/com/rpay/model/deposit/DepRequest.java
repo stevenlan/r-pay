@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,7 +48,7 @@ public class DepRequest extends Model<DepRequest> {
      */
     @ApiParam(name = "reqValue", value = "申请入金金额", required = true)
     @NotNull(message = "充值金额必填")
-    @Size(min = 10, message = "充值金额不能小于10USD的价值")
+    @Min(value=10, message = "充值金额不能小于10USD的价值")
     private Double reqValue ;
     @ApiParam(name = "depValue", value = "实际到账金额，管理端审核时需要填写", required = false)
     private Double depValue ;
