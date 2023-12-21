@@ -42,6 +42,8 @@ public class LimitServicesImpl implements LimitServices {
             if ( null != limit.getCoinMax() && value > limit.getCoinMax() ) {
                 throw new BusinessException("不能大于单笔最大限额，请修改后再提交");
             }
+        } else {
+            throw new BusinessException("该货币尚未开放操作，请联系客户经理");
         }
     }
 }
