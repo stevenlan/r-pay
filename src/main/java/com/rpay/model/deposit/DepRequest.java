@@ -48,7 +48,6 @@ public class DepRequest extends Model<DepRequest> {
      */
     @ApiParam(name = "reqValue", value = "申请入金金额", required = true)
     @NotNull(message = "充值金额必填")
-    @Min(value=10, message = "充值金额不能小于10USD的价值")
     private Double reqValue ;
     @ApiParam(name = "depValue", value = "实际到账金额，管理端审核时需要填写", required = false)
     private Double depValue ;

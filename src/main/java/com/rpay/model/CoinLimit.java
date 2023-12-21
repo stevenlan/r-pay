@@ -26,6 +26,7 @@ public class CoinLimit extends Model<CoinLimit> {
     private String coinCode ;
     private Float coinMin ;
     private Double coinMax ;
+    private Double commission ;
     private String optType ;
 
     /**

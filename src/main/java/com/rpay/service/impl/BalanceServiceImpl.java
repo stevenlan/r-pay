@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rpay.common.exception.BusinessException;
+import com.rpay.common.utils.LimitEnum;
 import com.rpay.common.utils.SessionUtils;
 import com.rpay.controller.vo.PerReqVO;
 import com.rpay.mapper.CryptRequestMapper;
@@ -50,16 +51,19 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     private final AccountService accountService ;
     private final BillService billService ;
     private final UserService userService ;
+    private final LimitServices limitServices ;
 
     @Override
     public DepRequest putDepReq(DepRequest dep) {
+        String act = LimitEnum.Deposit.getActType() ;
+        limitServices.calculateLimit(dep.getCoinCode(), act, dep.getReqValue()) ;
         if ( null != dep.getId() ) {
             DepRequest old = depMapper.selectById(dep.getId()) ;
             if ( old.getReqStatus() != 1 ) {
                 throw new BusinessException("该入账单据已经不允许修改") ;
             }
             if (StringUtils.isBlank(dep.getReqProof()) ) {
-                throw new BusinessException("确认汇款必须提交回款转正凭证和相关资料") ;
+                throw new BusinessException("确认汇款必须提交回款转帐凭证和相关资料") ;
             }
 
             LambdaUpdateChainWrapper<DepRequest> depUp = new LambdaUpdateChainWrapper<>(depMapper) ;
@@ -178,6 +182,9 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
             return withdraw ;
         }*/
 
+        String act = LimitEnum.Withdraw.getActType() ;
+        limitServices.calculateLimit(withdraw.getCoinCode(), act, withdraw.getReqValue()) ;
+
         BankDetail bank = accountService.findBank(withdraw.getBankId()) ;
         if ( null == bank ) {
             throw new BusinessException("选择的提款接收账户不可用") ;
@@ -280,6 +287,19 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
                 throw new BusinessException("支付密码错误，请重新输入") ;
             }
         }
+        String act ;
+        switch (req.getReqType()) {
+            case 1:
+                act = LimitEnum.Deposit.getActType();
+                break ;
+            case 2:
+                act = LimitEnum.Withdraw.getActType();
+                break ;
+            default :
+                throw new BusinessException("不存在的操作类行") ;
+        }
+
+        limitServices.calculateLimit(req.getCoinCode(), act, req.getReqValue()) ;
         req.setReqStatus(1) ;
         //if ( 2 == req.getReqType() ) {
 //            if ( null == req.getSrcCode() ) {

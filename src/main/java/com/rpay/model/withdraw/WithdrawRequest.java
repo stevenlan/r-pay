@@ -38,7 +38,6 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      */
     @ApiParam(name = "reqValue", value = "申请出金金额，必填", required = true)
     @NotNull(message = "提款金额必填")
-    @Min(value = 10, message = "提款金额不能小于10USD的价值")
     private Double reqValue ;
     /**
      * 实际出金金额

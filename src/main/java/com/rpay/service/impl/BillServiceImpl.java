@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rpay.common.exception.BusinessException;
+import com.rpay.common.utils.LimitEnum;
 import com.rpay.common.utils.SessionUtils;
 import com.rpay.mapper.CountriesMapper;
 import com.rpay.mapper.bill.BalanceDetailMapper;
@@ -17,6 +18,7 @@ import com.rpay.model.bill.BillDetail;
 import com.rpay.model.bill.ChangeDetail;
 import com.rpay.service.AccountService;
 import com.rpay.service.BillService;
+import com.rpay.service.LimitServices;
 import com.rpay.service.UserService;
 import com.rpay.service.query.BillDetailQuery;
 import com.rpay.service.query.ChangeDetailQuery;
@@ -40,6 +42,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
     private final CountriesMapper countriesMapper ;
     private final UserService userService ;
     private final AccountService accountService ;
+    private final LimitServices limitServices ;
 
     @Override
     public boolean recordDepBill(BillDetail bill) {
@@ -146,6 +149,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean creChange(ChangeDetail req) {
+        //计算
         ExQuery q = new ExQuery() ;
         q.setExFrom(req.getDepCoin()) ;
         q.setExTarget(req.getTargetCoin());
@@ -153,6 +157,9 @@ public class BillServiceImpl implements BillService, SessionUtils {
         if ( null == change ) {
             throw new BusinessException("当前不支持该种货币兑换") ;
         }
+
+        String act = LimitEnum.Change.getActType() ;
+        limitServices.calculateLimit(req.getDepCoin(), act, req.getDepValue()) ;
 
         req.setTargetValue(comChange(change, req.getDepValue())) ;
         req.setChangeRate(change.getExRate()) ;

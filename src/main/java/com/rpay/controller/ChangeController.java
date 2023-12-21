@@ -8,6 +8,7 @@ import com.rpay.model.Countries;
 import com.rpay.model.bill.ChangeDetail;
 import com.rpay.service.BillService;
 import com.rpay.service.ExchangeService;
+import com.rpay.service.LimitServices;
 import com.rpay.service.query.ChangeDetailQuery;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,6 +32,7 @@ import java.util.Set;
 public class ChangeController extends BaseController implements SessionUtils {
     private final ExchangeService exService ;
     private final BillService billService ;
+    private final LimitServices limitServices ;
 
     @ApiOperation(value = "查询可兑换来源列表")
     @GetMapping("/api/sourceCoin")
@@ -67,6 +69,7 @@ public class ChangeController extends BaseController implements SessionUtils {
     public R changeReq(@Valid @RequestBody ChangeDetail change) {
         change.setChangeStatus(0) ;
         change.setUserId(getLoginUserId()) ;
+        //计算限制
         billService.creChange(change) ;
         return R.succeed("操作成功") ;
     }
