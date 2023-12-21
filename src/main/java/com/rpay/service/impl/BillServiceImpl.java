@@ -266,4 +266,15 @@ public class BillServiceImpl implements BillService, SessionUtils {
 
         billMapper.insert(bill) ;
     }
+
+    @Override
+    public boolean initBalance(String coinCode, Long userId, Integer type) {
+        BalanceDetail detail = new BalanceDetail() ;
+        detail.setCoinCode(coinCode) ;
+        detail.setBalance(0D) ;
+        detail.setUserId(userId) ;
+        detail.setBalType(type) ;
+
+        return balanceMapper.insert(detail)>0 ;
+    }
 }

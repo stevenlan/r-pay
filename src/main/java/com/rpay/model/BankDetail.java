@@ -58,7 +58,7 @@ public class BankDetail extends Model<BankDetail> {
      */
     @ApiParam(name = "bankName", value = "银行名称", required = true)
     @NotBlank(message = "银行名称不能为空")
-    @Size(min = 3, max = 64,message = "账户持有人地址不能超过64个字节长度")
+    @Size(min = 3, max = 64,message = "银行名称64个字节长度")
     private String bankName ;
 
     /**

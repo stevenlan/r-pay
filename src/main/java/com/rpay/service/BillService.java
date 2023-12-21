@@ -79,4 +79,13 @@ public interface BillService {
      * @param backType 回滚后的账单类型
      */
     void rollbackBal(Long userId, String coin, Integer billType, Long outId, Integer backType) ;
+
+    /**
+     * 初始化账本
+     * @param coinCode
+     * @param userId
+     * @param type
+     * @return
+     */
+    boolean initBalance(String coinCode, Long userId, Integer type) ;
 }

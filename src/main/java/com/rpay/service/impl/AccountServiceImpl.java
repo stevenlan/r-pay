@@ -12,6 +12,7 @@ import com.rpay.mapper.ExchangeMapper;
 import com.rpay.mapper.KycCertificationMapper;
 import com.rpay.model.*;
 import com.rpay.service.AccountService;
+import com.rpay.service.BillService;
 import com.rpay.service.ExchangeService;
 import com.rpay.service.UserService;
 import com.rpay.service.query.BankQuery;
@@ -51,6 +52,8 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
     private MessageService messageService ;
     @Autowired
     private ExchangeService exService ;
+    @Autowired
+    private BillService billService ;
 
     @Override
     public boolean updateAccount(BankDetail bank) {
@@ -278,6 +281,12 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
             KycCertification kyc = kycMapper.selectById(kycId) ;
             userService.activeUser(kyc.getUserId()) ;
             User u = userService.getById(kyc.getUserId()) ;
+            //创建默认账本USD、USDT，NGN，PHP
+            billService.initBalance("USD",kyc.getUserId(),1) ;
+            billService.initBalance("USDT",kyc.getUserId(),2) ;
+            billService.initBalance("NGN",kyc.getUserId(),1) ;
+            billService.initBalance("PHP",kyc.getUserId(),1) ;
+
             messageService.sendPassMail("恭喜您，通过ReliancePay的审核！", u.getEmail()) ;
         }
         return flag ;
