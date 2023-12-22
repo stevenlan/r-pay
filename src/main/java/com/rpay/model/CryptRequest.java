@@ -29,8 +29,13 @@ public class CryptRequest extends Model<CryptRequest> {
     @ApiParam(name = "reqValue", value = "申请金额，必填", required = true)
     @NotNull
     private Double reqValue ;
-    @ApiParam(name = "witValue", value = "兑换完成的实际金额，无需填写，后台根据汇率计算", required = false)
-    private Double witValue ;
+    @ApiParam(name = "withdrawValue", value = "兑换完成的实际金额，无需填写，后台根据汇率计算", required = false)
+    private Double withdrawValue ;
+    /**
+     * 手续费
+     */
+    @ApiParam(name = "commission", value = "手续费，最后财务审核确认出账时必填", required = false)
+    private Float commission ;
     @ApiParam(name = "agreement", value = "加密链，必填", required = true)
     @NotBlank
     private String agreement ;
