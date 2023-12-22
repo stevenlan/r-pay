@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +33,22 @@ public class MyExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(BindException.class)
-    public R bindExceptionHandler(BindException e) {
+    public R<List<ValidVO>> bindExceptionHandler(BindException e) {
         log.error("出现了异常! {}", e);
-        ValidVO v = new ValidVO() ;
-        v.setFiled(e.getFieldErrors().get(0).getField());
-        v.setErrMsg(e.getFieldErrors().get(0).getDefaultMessage());
-        v.setErrMsg(coverErr(v.getErrMsg())) ;
 
-        return R.failed(v.getErrMsg()) ;
+        List<ValidVO> validList = new ArrayList<>() ;
+        e.getFieldErrors().forEach(err -> {
+            ValidVO v = new ValidVO() ;
+            v.setFiled(err.getField());
+            v.setErrMsg(coverErr(err.getDefaultMessage())) ;
+
+            validList.add(v) ;
+        } );
+
+
+        R<List<ValidVO>> ret = R.failed(validList.get(0).getErrMsg()) ;
+        ret.setData(validList) ;
+        return ret ;
     }
 
     @ResponseBody

@@ -1,16 +1,13 @@
 package com.rpay.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.rpay.common.exception.BusinessException;
 import com.rpay.common.utils.R;
 import com.rpay.controller.vo.PerVO;
-import com.rpay.model.BankDetail;
-import com.rpay.model.Countries;
-import com.rpay.model.KycCertification;
-import com.rpay.model.User;
+import com.rpay.model.*;
 import com.rpay.model.bill.BalanceDetail;
 import com.rpay.model.bill.BillDetail;
-import com.rpay.model.bill.ChangeDetail;
+import com.rpay.model.validate.group.BankNor;
+import com.rpay.model.validate.group.BankSimple;
 import com.rpay.service.AccountService;
 import com.rpay.service.BalanceService;
 import com.rpay.service.BillService;
@@ -18,7 +15,6 @@ import com.rpay.service.UserService;
 import com.rpay.service.model.AccountDetail;
 import com.rpay.service.query.BillDetailQuery;
 import com.rpay.service.query.BankQuery;
-import com.rpay.service.query.ChangeDetailQuery;
 import com.rpay.service.query.KycQuery;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +23,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +47,7 @@ public class AccountController extends BaseController {
     private final UserService userService;
     private final BalanceService balService ;
     private final BillService billService ;
+    private final SmartValidator validator ;
 
     //获取当前用户状态(账号认证资料审核状态，银行账户申请状态)
     @ApiOperation(value = "获取当前账号的认证信息")
@@ -168,7 +167,19 @@ public class AccountController extends BaseController {
     @ApiOperation(value = "提交银行信息")
     @PostMapping("/api/subBank")
     @ResponseBody
-    public R subBank(HttpServletRequest request, @Valid @RequestBody BankDetail bank) {
+    public R subBank(HttpServletRequest request, @RequestBody BankDetail bank) throws BindException {
+        BindException bindException = new BindException(bank, BankDetail.class.getName());
+        if ( StringUtils.isNotBlank(bank.getBankCountry())
+                && (StringUtils.equalsIgnoreCase("ph", bank.getBankCountry())
+                || StringUtils.equalsIgnoreCase("ng", bank.getBankCountry()) ) ) {
+            validator.validate(bank, bindException, BankSimple.class) ;
+        } else {
+            validator.validate(bank, bindException, BankNor.class) ;
+        }
+        if ( bindException.hasErrors() ) {
+            throw bindException ;
+        }
+
         if ( StringUtils.isBlank(bank.getPayPass()) && StringUtils.isBlank(bank.getVerCode()) ) {
             return R.failed("请填写支付密码或者验证码");
         }

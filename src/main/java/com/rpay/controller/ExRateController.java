@@ -5,6 +5,7 @@ import com.rpay.common.exception.BusinessException;
 import com.rpay.common.utils.R;
 import com.rpay.model.*;
 import com.rpay.model.validate.group.AdminGroup;
+import com.rpay.model.validate.group.BankNor;
 import com.rpay.model.validate.group.UserGroup;
 import com.rpay.service.AccountService;
 import com.rpay.service.ExchangeService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.util.ListUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -79,7 +81,7 @@ public class ExRateController extends BaseController{
     @PostMapping("/api/setDeposit")
     @RequiresRoles("admin")
     @ResponseBody
-    public R setDeposit(@Valid @RequestBody BankDetail deposit) {
+    public R setDeposit(@Validated(BankNor.class) @RequestBody BankDetail deposit) {
         if (StringUtils.isBlank(deposit.getCoinCode())){
             R.failed("请选择收款货币！") ;
         }
@@ -187,7 +189,7 @@ public class ExRateController extends BaseController{
             userId = getLoginUserId() ;
         }
         List<CryAccount> cry = exService.findCry(cryCode,userId) ;
-        if ( null != cry || userService.isAdmin(getLoginUser()) ) {
+        if ( !ListUtils.isEmpty(cry) || userService.isAdmin(getLoginUser()) ) {
             return R.succeed(cry) ;
         }
         return R.failed("该账户无对应钱包地址收款，请联系管理员添加") ;
