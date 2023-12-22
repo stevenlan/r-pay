@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -32,7 +33,7 @@ public class LimitController {
     @ApiOperation(value = "获取对应货币限额的分页信息")
     @PostMapping("/api/limit/pageLimit")
     @ResponseBody
-    public R<Page<CoinLimit>> pageLimit(Page<CoinLimit> query) {
+    public R<Page<CoinLimit>> pageLimit(@RequestBody Page<CoinLimit> query) {
         return R.succeed(limitServices.limitPage(query)) ;
     }
 }
