@@ -74,6 +74,13 @@ public interface BalanceService {
     boolean perWithdrawRequest(PerReqVO wit) ;
 
     /**
+     * 取消提现
+     * @param reqId
+     * @return
+     */
+    boolean cancelWithdraw(Long reqId) ;
+
+    /**
      * 提交加密货币相关请求
      * @param req 请求信息
      * @return
@@ -100,6 +107,13 @@ public interface BalanceService {
      * @return
      */
     boolean perCryReq(PerReqVO per) ;
+
+    /**
+     * 取消申请
+     * @param reqId
+     * @return
+     */
+    boolean cancelReq(Long reqId) ;
 
     /**
      * 查询用户的账本列表

@@ -172,6 +172,16 @@ public class BalanceController extends BaseController implements SessionUtils {
         return R.failed("审核失败") ;
     }
 
+    @ApiOperation(value = "取消法币提现申请，状态为1时可以取消")
+    @GetMapping("/api/cancelWithdraw")
+    @ResponseBody
+    public R cancelWithdraw(Long reqId) {
+        if (balService.cancelWithdraw(reqId)){
+            return R.succeed("取消成功") ;
+        }
+        return R.failed("操作失败") ;
+    }
+
     @ApiOperation(value = "加密货币出金申请withdraw")
     @PostMapping("/api/putCryptWithdraw")
     @ResponseBody
@@ -227,6 +237,16 @@ public class BalanceController extends BaseController implements SessionUtils {
             return R.succeed("审核成功") ;
         }
         return R.failed("审核失败") ;
+    }
+
+    @ApiOperation(value = "取消加密提现申请，状态为1时可以取消")
+    @GetMapping("/api/cancelCryptWithdraw")
+    @ResponseBody
+    public R cancelCryptWithdraw(Long cryptId) {
+        if (balService.cancelReq(cryptId)){
+            return R.succeed("取消成功") ;
+        }
+        return R.failed("操作失败") ;
     }
 
     @ApiOperation(value = "可选择入金货币")

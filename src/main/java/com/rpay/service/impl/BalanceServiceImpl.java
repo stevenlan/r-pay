@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,19 +261,35 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
             up.set(WithdrawRequest::getReqStatus,2) ;
         } else {
             up.set(WithdrawRequest::getReqStatus,3) ;
-            if ( null == wit.getWithdrawValue() ) {
+            /*if ( null == wit.getWithdrawValue() ) {
                 throw new BusinessException("必须填写实际提款金额") ;
-            }
+            }*/
             if ( null == wit.getCommission() ) {
                 throw new BusinessException("必须填写手续费") ;
             }
-            up.set(WithdrawRequest::getWithdrawValue, wit.getWithdrawValue()) ;
+            up.set(WithdrawRequest::getWithdrawValue, commissionReq(old.getReqValue(), wit.getCommission())) ;
             up.set(WithdrawRequest::getCommission, wit.getCommission()) ;
             up.set(StringUtils.isNotBlank(wit.getMemo()), WithdrawRequest::getMemo, wit.getMemo()) ;
             up.set(StringUtils.isNotBlank(wit.getProof()), WithdrawRequest::getWithdrawProof, wit.getProof()) ;
         }
         up.set(WithdrawRequest::getRecorded, getLoginUserId()) ;
 
+        return up.update() ;
+    }
+
+    @Override
+    public boolean cancelWithdraw(Long reqId) {
+        WithdrawRequest old = findWithdrawRequest(reqId) ;
+        if ( null == old ) {
+            throw new BusinessException("提款申请不存在") ;
+        }
+        if ( 1 != old.getReqStatus() ) {
+            throw new BusinessException("该提款申请不能取消") ;
+        }
+
+        LambdaUpdateChainWrapper<WithdrawRequest> up = new LambdaUpdateChainWrapper<>(witMapper) ;
+        up.eq(WithdrawRequest::getId, reqId) ;
+        up.set(WithdrawRequest::getReqStatus,5) ;
         return up.update() ;
     }
 
@@ -394,6 +411,15 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         up.set(CryptRequest::getRecorded, getLoginUserId()) ;
         up.set(req.getReqType() == 2 && StringUtils.isNotBlank(per.getTid())
                 ,CryptRequest::getTid, per.getTid()) ;
+        if ( req.getReqType() == 2 && null != per.getCommission() ) {
+            if ( null == per.getCommission() ) {
+                throw new BusinessException("必须填写手续费") ;
+            }
+            up.set( CryptRequest::getWithdrawValue, commissionReq(req.getReqValue(), per.getCommission()) ) ;
+            up.set( CryptRequest::getCommission, per.getCommission() ) ;
+        }
+
+
 
         boolean flag = up.update() ;
         if ( flag ) {
@@ -420,6 +446,22 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
             }
         }
         return flag ;
+    }
+
+    @Override
+    public boolean cancelReq(Long reqId) {
+        CryptRequest req = findCryReq(reqId) ;
+        if ( null == req ) {
+            throw new BusinessException("该申请不存在") ;
+        }
+        if ( 1 != req.getReqStatus() || 1 == req.getReqType() ) {
+            throw new BusinessException("该申请不能取消") ;
+        }
+
+        LambdaUpdateChainWrapper<CryptRequest> up = new LambdaUpdateChainWrapper<>(cryMapper) ;
+        up.eq(CryptRequest::getId, reqId) ;
+        up.set(CryptRequest::getReqStatus, 4) ;
+        return up.update() ;
     }
 
     @Override

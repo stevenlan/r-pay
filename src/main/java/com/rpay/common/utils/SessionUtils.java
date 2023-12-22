@@ -66,4 +66,19 @@ public interface SessionUtils {
         String retValue = ret.format(src.multiply(rate).doubleValue()) ;
         return new BigDecimal(retValue).doubleValue() ;
     }
+
+    /**
+     * 计算差值
+     * @param reqValue
+     * @param commission
+     * @return
+     */
+    default Double commissionReq(Double reqValue, Float commission) {
+        String total = reqValue.toString() ;
+        String com = commission.toString() ;
+        BigDecimal t = new BigDecimal(total) ;
+        BigDecimal c = new BigDecimal(com) ;
+
+        return t.subtract(c).doubleValue() ;
+    }
 }
