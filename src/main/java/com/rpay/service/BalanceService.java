@@ -46,6 +46,13 @@ public interface BalanceService {
     boolean perDeposit(PerReqVO dep) ;
 
     /**
+     * 取消入账申请
+     * @param reqId
+     * @return
+     */
+    boolean cancelDeposit(Long reqId) ;
+
+    /**
      * 提交出金申请
      * @param withdraw 出金申请数据
      * @return

@@ -82,6 +82,16 @@ public class BalanceController extends BaseController implements SessionUtils {
         return R.failed("审核失败") ;
     }
 
+    @ApiOperation(value = "取消法币入账申请，状态为1时可以取消")
+    @GetMapping("/api/cancelDeposit")
+    @ResponseBody
+    public R cancelDeposit(Long reqId) {
+        if (balService.cancelDeposit(reqId)){
+            return R.succeed("取消成功") ;
+        }
+        return R.failed("操作失败") ;
+    }
+
     @ApiOperation(value = "加密货币入金申请提交接口")
     @PostMapping("/api/putCryptDeposit")
     @ResponseBody

@@ -153,6 +153,25 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     }
 
     @Override
+    public boolean cancelDeposit(Long reqId) {
+        DepRequest old = depMapper.selectById(reqId) ;
+        if ( null == old ) {
+            throw new BusinessException("入账申请不存在.") ;
+        }
+        if ( !old.getUserId().equals(getLoginUserId()) ) {
+            throw new BusinessException("该单据不属于你，不能操作.") ;
+        }
+        if ( old.getReqStatus() != 1 ) {
+            throw new BusinessException("当前状态不允许取消.") ;
+        }
+        LambdaUpdateChainWrapper<DepRequest> depUp = new LambdaUpdateChainWrapper<>(depMapper) ;
+        depUp.eq(DepRequest::getId,reqId) ;
+        depUp.set(DepRequest::getReqStatus,6) ;
+
+        return depUp.update() ;
+    }
+
+    @Override
     public DepRequest findDepRequest(Long id) {
         return depMapper.selectById(id) ;
     }
@@ -283,13 +302,16 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         if ( null == old ) {
             throw new BusinessException("提款申请不存在") ;
         }
+        if ( !old.getUserId().equals(getLoginUserId()) ) {
+            throw new BusinessException("该单据不属于你，不能操作.") ;
+        }
         if ( 1 != old.getReqStatus() ) {
             throw new BusinessException("该提款申请不能取消") ;
         }
 
         LambdaUpdateChainWrapper<WithdrawRequest> up = new LambdaUpdateChainWrapper<>(witMapper) ;
         up.eq(WithdrawRequest::getId, reqId) ;
-        up.set(WithdrawRequest::getReqStatus,5) ;
+        up.set(WithdrawRequest::getReqStatus,6) ;
         return up.update() ;
     }
 
@@ -453,6 +475,9 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         CryptRequest req = findCryReq(reqId) ;
         if ( null == req ) {
             throw new BusinessException("该申请不存在") ;
+        }
+        if ( !req.getUserId().equals(getLoginUserId()) ) {
+            throw new BusinessException("该单据不属于你，不能操作.") ;
         }
         if ( 1 != req.getReqStatus() || 1 == req.getReqType() ) {
             throw new BusinessException("该申请不能取消") ;
