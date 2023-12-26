@@ -72,14 +72,14 @@ public class LoginController extends BaseController {
             request.getSession().setAttribute("MailCode", code) ;
 
             userService.mailCheckCode(check.getEmail(),code) ;
-            return R.succeed("发送成功") ;
+            return R.succeed(coverString("{sys.sms.success}")) ;
         } else if ( null != check && StringUtils.isNotBlank(check.getAreaCode())
                 && StringUtils.isNotBlank(check.getPhone()) ) {
             //发送短信确认码
             //request.getSession().removeAttribute("MailCode");
-            return R.failed("暂未开通短信通道") ;
+            return R.failed(coverString("{sys.sms.unOpen}")) ;
         } else {
-            return R.failed("未提供邮箱或者完整手机号码") ;
+            return R.failed(coverString("{sys.sms.noSender}")) ;
         }
     }
 
@@ -93,7 +93,7 @@ public class LoginController extends BaseController {
         String sessionCode = (String) request.getSession().getAttribute("captcha");
         if ( null == login.getCode() || null == sessionCode || !StringUtils.equalsIgnoreCase(sessionCode,login.getCode().trim()) ) {
             request.getSession().removeAttribute("captcha");
-            return R.failed("图形验证码不正确");
+            return R.failed(coverString("{sys.captcha.error}"));
         }
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(login.getUsername(), login.getPassword(), null == login.getRememberMe()?Boolean.FALSE : login.getRememberMe());
@@ -102,11 +102,11 @@ public class LoginController extends BaseController {
             user.setAdmin(userService.isAdmin(user)) ;
             return R.succeed(user);
         } catch (UnknownAccountException e) {
-            return R.failed("用户不存在");
+            return R.failed(coverString("{sys.err.userExist}"));
         } catch (IncorrectCredentialsException e) {
-            return R.failed("密码错误");
+            return R.failed(coverString("{sys.err.pwd}"));
         } catch (ExcessiveAttemptsException eae) {
-            return R.failed("操作频繁，请稍后再试");
+            return R.failed(coverString("{sys.err.frequent}"));
         }
     }
 
@@ -115,7 +115,7 @@ public class LoginController extends BaseController {
     @ResponseBody
     public R logout() {
         out() ;
-        return R.succeed("登出成功") ;
+        return R.succeed(coverString("{sys.logout.success}")) ;
     }
 
     /**
@@ -128,14 +128,14 @@ public class LoginController extends BaseController {
         String sessionCode = (String) request.getSession().getAttribute("captcha");
         if (user.getCode() == null || null == sessionCode || !StringUtils.equalsIgnoreCase(sessionCode,user.getCode().trim())) {
             request.getSession().removeAttribute("captcha");
-            return R.failed("图形验证码不正确");
+            return R.failed(coverString("{sys.captcha.error}"));
         }
 
         String mailCode = (String)request.getSession().getAttribute("MailCode") ;
         String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
         if ( !StringUtils.equalsIgnoreCase(mailCode, user.getCheckCode())
                 && !StringUtils.equalsIgnoreCase(phoneCode, user.getCheckCode()) ) {
-            return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+            return R.failed(coverString("{sys.sms.valid}"));
         }
         request.getSession().removeAttribute("MailCode");
         request.getSession().removeAttribute("PhoneCode");
@@ -154,14 +154,14 @@ public class LoginController extends BaseController {
                 user.setAdmin(userService.isAdmin(user)) ;
                 return R.succeed(user);
             } catch (UnknownAccountException e) {
-                return R.failed("用户不存在");
+                return R.failed(coverString("{sys.err.userExist}"));
             } catch (IncorrectCredentialsException e) {
-                return R.failed("密码错误");
+                return R.failed(coverString("{sys.err.pwd}"));
             } catch (ExcessiveAttemptsException eae) {
-                return R.failed("操作频繁，请稍后再试");
+                return R.failed(coverString("{sys.err.frequent}"));
             }
         }
-        return R.failed("注册失败") ;
+        return R.failed(coverString("{sys.err.reg}")) ;
     }
 
     /**
@@ -178,12 +178,12 @@ public class LoginController extends BaseController {
         } else if (StringUtils.equalsIgnoreCase(phoneCode, password.getCheckCode()) ) {
             userService.resetPass(password.getPhone(),password.getNewPass()) ;
         } else {
-            return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+            return R.failed(coverString("{sys.sms.valid}"));
         }
         request.getSession().removeAttribute("MailCode");
         request.getSession().removeAttribute("PhoneCode");
 
-        return R.succeed("修改成功") ;
+        return R.succeed(coverString("{sys.mod.success}")) ;
     }
 
     /**
@@ -194,7 +194,7 @@ public class LoginController extends BaseController {
     @ResponseBody
     public R resetPwd(@Valid @RequestBody Password password) {
         userService.resetPass(getLoginUserId(),password.getOldPass(),password.getNewPass()) ;
-        return R.succeed("修改成功") ;
+        return R.succeed(coverString("{sys.mod.success}")) ;
     }
 
     @ApiOperation(value = "设置支付密码")
@@ -205,13 +205,13 @@ public class LoginController extends BaseController {
         String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
         if ( !StringUtils.equalsIgnoreCase(mailCode, password.getCheckCode())
                 && !StringUtils.equalsIgnoreCase(phoneCode, password.getCheckCode()) ) {
-            return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+            return R.failed(coverString("{sys.sms.valid}"));
         }
         request.getSession().removeAttribute("MailCode");
         request.getSession().removeAttribute("PhoneCode");
 
         userService.setPayPass(getLoginUserId(),password.getOldPass(),password.getNewPass());
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 
     @ApiOperation(value = "设置支付密码")
@@ -222,13 +222,13 @@ public class LoginController extends BaseController {
         String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
         if ( !StringUtils.equalsIgnoreCase(mailCode, password.getCheckCode())
                 && !StringUtils.equalsIgnoreCase(phoneCode, password.getCheckCode()) ) {
-            return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+            return R.failed(coverString("{sys.sms.valid}"));
         }
         request.getSession().removeAttribute("MailCode");
         request.getSession().removeAttribute("PhoneCode");
 
         userService.resetEmail(getLoginUserId(), password.getEmail());
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 
     @ApiOperation(value = "获取当前登录用户信息")

@@ -30,7 +30,6 @@ public class ChangeDetail extends Model<ChangeDetail> {
     private String targetCoin ;
     @ApiParam(name = "depValue", value = "兑换金额", required = true)
     @NotNull(message = "{change.depValue.empty}")
-    @Min(value=10,message = "{change.depValue.min}")
     private Double depValue ;
     @ApiParam(name = "targetValue", value = "目标金额，无需传递，通过后台计算", required = false)
     private Double targetValue ;

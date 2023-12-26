@@ -50,7 +50,7 @@ public class BalanceController extends BaseController implements SessionUtils {
         if ( null != ret ) {
             return R.succeed(ret) ;
         }
-        return R.failed("入金失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
     @ApiOperation(value = "入金申请列表查询，带分页数据")
     @PostMapping("/api/depositList")
@@ -77,9 +77,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R perDeposit(@Valid @RequestBody PerReqVO per) {
         if (balService.perDeposit(per) ) {
-            return R.succeed("审核成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("审核失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "取消法币入账申请，状态为1时可以取消")
@@ -87,9 +87,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R cancelDeposit(Long reqId) {
         if (balService.cancelDeposit(reqId)){
-            return R.succeed("取消成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "加密货币入金申请提交接口")
@@ -101,7 +101,7 @@ public class BalanceController extends BaseController implements SessionUtils {
         if ( null != ret ) {
             return R.succeed(ret) ;
         }
-        return R.failed("入金失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "加密货币入金列表查询，带分页")
@@ -130,9 +130,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R perCryptDeposit(@Valid @RequestBody PerReqVO per) {
         if (balService.perCryReq(per)){
-            return R.succeed("审核成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("审核失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "出金申请withdraw")
@@ -140,7 +140,7 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R putWithdraw(HttpServletRequest request, @Valid @RequestBody WithdrawRequest withdraw) {
         if ( StringUtils.isBlank(withdraw.getPayPass()) && StringUtils.isBlank(withdraw.getVerCode()) ) {
-            return R.failed("请填写支付密码或者验证码");
+            return R.failed(coverString("{sys.pay.empty}"));
         }
         if (StringUtils.isBlank(withdraw.getPayPass()) ) {
             //验证码校验，或者支付密码校验
@@ -148,7 +148,7 @@ public class BalanceController extends BaseController implements SessionUtils {
             String phoneCode = (String) request.getSession().getAttribute("PhoneCode");
             if (!StringUtils.equalsIgnoreCase(mailCode, withdraw.getVerCode())
                     && !StringUtils.equalsIgnoreCase(phoneCode, withdraw.getVerCode())) {
-                return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+                return R.failed(coverString("{sys.sms.valid}"));
             }
             request.getSession().removeAttribute("MailCode");
             request.getSession().removeAttribute("PhoneCode");
@@ -157,7 +157,7 @@ public class BalanceController extends BaseController implements SessionUtils {
         if ( null != ret ) {
             return R.succeed(ret) ;
         }
-        return R.failed("出金失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "出金列表查询，带分页")
@@ -177,9 +177,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R perWithdraw(@Valid @RequestBody PerReqVO per) {
         if ( balService.perWithdrawRequest(per) ) {
-            return R.succeed("审批成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("审核失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "取消法币提现申请，状态为1时可以取消")
@@ -187,9 +187,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R cancelWithdraw(Long reqId) {
         if (balService.cancelWithdraw(reqId)){
-            return R.succeed("取消成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "加密货币出金申请withdraw")
@@ -197,7 +197,7 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R putCryptWithdraw(HttpServletRequest request, @Valid @RequestBody CryptRequest req) {
         if ( StringUtils.isBlank(req.getPayPass()) && StringUtils.isBlank(req.getVerCode()) ) {
-            return R.failed("请填写支付密码或者验证码");
+            return R.failed(coverString("{sys.pay.empty}"));
         }
         if (StringUtils.isBlank(req.getPayPass()) ) {
             //验证码校验，或者支付密码校验
@@ -205,7 +205,7 @@ public class BalanceController extends BaseController implements SessionUtils {
             String phoneCode = (String) request.getSession().getAttribute("PhoneCode");
             if (!StringUtils.equalsIgnoreCase(mailCode, req.getVerCode())
                     && !StringUtils.equalsIgnoreCase(phoneCode, req.getVerCode())) {
-                return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+                return R.failed(coverString("{sys.sms.valid}"));
             }
             request.getSession().removeAttribute("MailCode");
             request.getSession().removeAttribute("PhoneCode");
@@ -215,7 +215,7 @@ public class BalanceController extends BaseController implements SessionUtils {
         if ( null != ret ) {
             return R.succeed(ret) ;
         }
-        return R.failed("出金失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "加密货币出金列表查询，带分页")
@@ -244,9 +244,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R perCryptWithdraw(@Valid @RequestBody PerReqVO per) {
         if (balService.perCryReq(per)){
-            return R.succeed("审核成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("审核失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "取消加密提现申请，状态为1时可以取消")
@@ -254,9 +254,9 @@ public class BalanceController extends BaseController implements SessionUtils {
     @ResponseBody
     public R cancelCryptWithdraw(Long cryptId) {
         if (balService.cancelReq(cryptId)){
-            return R.succeed("取消成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "可选择入金货币")
@@ -312,7 +312,7 @@ public class BalanceController extends BaseController implements SessionUtils {
     public R<ExQuery> calculateRate(@Valid @RequestBody ExQuery change) {
         Exchange ex = accService.matchExchange(change) ;
         if ( null == ex ) {
-            return R.failed("不支持这两种货币兑换") ;
+            return R.failed(coverString("{change.coins.support}")) ;
         }
         change.setTargetValue(comChange(ex, change.getExValue())) ;
         return R.succeed(change) ;

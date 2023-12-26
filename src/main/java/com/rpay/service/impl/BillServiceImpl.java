@@ -53,7 +53,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
         //判断余额是否充足
         if ( 1 != bill.getBillType() && 4 != bill.getBillType() ) {
             if ( null == detail || detail.getBalance() < bill.getBillValue()  ) {
-                throw new BusinessException("余额不足，请刷新余额后再操作");
+                throw new BusinessException("{balance.value.enough}");
             }
         }
 
@@ -61,7 +61,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
                 .eq(Countries::getCoinCode,bill.getCoinCode())) ;
         //判断所提货币存在于否
         if ( null == countries && countries.isEmpty() ) {
-            throw new BusinessException("所选择货币不存在") ;
+            throw new BusinessException("{balance.coin.exist}") ;
         }
 
         bill.setOuterType(countries.get(0).getCoinType()) ;
@@ -90,7 +90,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
             detail = balanceMapper.selectById(detail.getId()) ;
             bill.setBalance(detail.getBalance()) ;
         } else {
-            throw new BusinessException("操作异常，请重新再试") ;
+            throw new BusinessException("{sys.op.failed}") ;
         }
 
         return billMapper.insert(bill) > 0;
@@ -155,7 +155,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
         q.setExTarget(req.getTargetCoin());
         Exchange change = accountService.matchExchange(q) ;
         if ( null == change ) {
-            throw new BusinessException("当前不支持该种货币兑换") ;
+            throw new BusinessException("{balance.coin.change}") ;
         }
 
         String act = LimitEnum.Change.getActType() ;
@@ -182,7 +182,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
                 .eq(ChangeDetail::getChangeStatus, 0) ;
         ChangeDetail change = changeMapper.selectOne(query) ;
         if ( null == change ) {
-            throw new BusinessException("不存在该任务，或者不允许取消") ;
+            throw new BusinessException("{deposit.op.cancel}") ;
         }
         LambdaUpdateChainWrapper<ChangeDetail> up = new LambdaUpdateChainWrapper<>(changeMapper) ;
         up.eq(ChangeDetail::getId,id) ;
@@ -200,7 +200,7 @@ public class BillServiceImpl implements BillService, SessionUtils {
                 .eq(ChangeDetail::getChangeStatus, 0) ;
         ChangeDetail change = changeMapper.selectOne(query) ;
         if ( null == change ) {
-            throw new BusinessException("不存在该任务，或者不允许拒绝") ;
+            throw new BusinessException("{sys.op.reject}") ;
         }
 
         LambdaUpdateChainWrapper<ChangeDetail> up = new LambdaUpdateChainWrapper<>(changeMapper) ;
@@ -242,10 +242,10 @@ public class BillServiceImpl implements BillService, SessionUtils {
                 .eq(BillDetail::getBillType,billType)
                 .eq(BillDetail::getOuterId,outId)) ;
         if ( null == bal ) {
-            throw new BusinessException("当前的货币账本未有入账，请联系客服处理") ;
+            throw new BusinessException("{balance.init.exist}") ;
         }
         if ( null == bill ) {
-            throw new BusinessException("不存在换汇时的入账账单，请联系客服处理") ;
+            throw new BusinessException("{balance.bill.exist}") ;
         }
         //汇兑划出了，取消后资金重新入账
         bill.setBillType(backType);

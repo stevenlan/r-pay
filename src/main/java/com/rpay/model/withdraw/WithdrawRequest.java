@@ -28,7 +28,7 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      * 出金币种
      */
     @ApiParam(name = "coinCode", value = "出金货币代码，必选，只能选择法币", required = true)
-    @NotBlank
+    @NotBlank(message = "{withdraw.coinCode.empty}")
     private String coinCode ;
 
     @ApiParam(name = "targetCode", value = "出金目标货币代码，已废除", required = false)
@@ -37,7 +37,7 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      * 申请出金额度
      */
     @ApiParam(name = "reqValue", value = "申请出金金额，必填", required = true)
-    @NotNull(message = "提款金额必填")
+    @NotNull(message = "{withdraw.reqValue.empty}")
     private Double reqValue ;
     /**
      * 实际出金金额
@@ -58,7 +58,7 @@ public class WithdrawRequest extends Model<WithdrawRequest> {
      * 出金接收银行账户
      */
     @ApiParam(name = "bankId", value = "接款账户，必填", required = true)
-    @NotNull
+    @NotNull(message = "{withdraw.bank.empty}")
     private Long bankId ;
     /**
      * 出金申请账户

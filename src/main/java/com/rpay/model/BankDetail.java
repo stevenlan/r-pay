@@ -35,71 +35,70 @@ public class BankDetail extends Model<BankDetail> {
      * 账号名称
      */
     @ApiParam(name = "accountName", value = "账户名称", required = true)
-    @NotBlank(message = "账户名称不能为空", groups = {BankNor.class, BankSimple.class})
-    @Size(min = 4, max = 32,message = "账户名称请输入[4 - 32]之间的中文字或者英文字母", groups = {BankNor.class, BankSimple.class})
+    @NotBlank(message = "{bank.accountName.empty}", groups = {BankNor.class, BankSimple.class})
+    @Size(min = 4, max = 32,message = "{bank.accountName.size}", groups = {BankNor.class, BankSimple.class})
     private String accountName ;
 
     /**
      * 户主所述国家
      */
     @ApiParam(name = "country", value = "账户持有人所属国家", required = true)
-    @NotBlank(message = "账户持有人所属国家必选", groups = {BankNor.class})
-    @Size(min = 2, max = 8,message = "请选择正确的账户持有人国家", groups = {BankNor.class})
+    @NotBlank(message = "{bank.country.empty}", groups = {BankNor.class})
+    @Size(min = 2, max = 8,message = "{bank.country.size}", groups = {BankNor.class})
     private String country ;
 
     /**
      * 户主居住地址
      */
     @ApiParam(name = "accountAdd", value = "账户持有人居住地址", required = true)
-    @NotBlank(message = "账户持有人地址不能为空", groups = {BankNor.class})
-    @Size(min = 6, max = 128,message = "账户持有人地址请输入[6 - 128]之间的中文字或者英文字母", groups = {BankNor.class})
+    @NotBlank(message = "{bank.accountAdd.empty}", groups = {BankNor.class})
+    @Size(min = 6, max = 128,message = "{bank.accountAdd.size}", groups = {BankNor.class})
     private String accountAdd ;
 
     /**
      * 银行名称
      */
     @ApiParam(name = "bankName", value = "银行名称", required = true)
-    @NotBlank(message = "银行名称不能为空", groups = {BankNor.class, BankSimple.class})
-    @Size(min = 3, max = 64,message = "银行名称请输入[3 - 64]之间的中文字或者英文字母", groups = {BankNor.class, BankSimple.class})
+    @NotBlank(message = "{bank.bankName.empty}", groups = {BankNor.class, BankSimple.class})
+    @Size(min = 3, max = 64,message = "{bank.bankName.size}", groups = {BankNor.class, BankSimple.class})
     private String bankName ;
 
     /**
      * swift代码
      */
     @ApiParam(name = "swiftCode", value = "swift代码", required = true)
-    @NotBlank(message = "swift不能为空", groups = {BankNor.class})
-    @Size(min = 4, max = 16, message = "请输入正确的swift", groups = {BankNor.class})
+    @NotBlank(message = "{bank.swiftCode.empty}", groups = {BankNor.class})
+    @Size(min = 4, max = 16, message = "{bank.swiftCode.size}", groups = {BankNor.class})
     private String swiftCode ;
 
     /**
      * 银行代码
      */
     @ApiParam(name = "bankCode", value = "银行代码", required = true)
-    //@Size(min = 2, max = 16, message = "请输入正确的银行代码")
     private String bankCode ;
 
     /**
      * 银行账号
      */
     @ApiParam(name = "bankAccount", value = "银行账户号码", required = true)
-    @NotBlank(message = "账户号码不能为空", groups = {BankNor.class, BankSimple.class})
-    @Size(min = 6, max = 32, message = "请输入正确的账户号码", groups = {BankNor.class, BankSimple.class})
+    @NotBlank(message = "{bank.bankAccount.empty}", groups = {BankNor.class, BankSimple.class})
+    @Size(min = 6, max = 32, message = "{bank.bankAccount.size}", groups = {BankNor.class, BankSimple.class})
     private String bankAccount ;
 
     /**
      * 开户国家
      */
     @ApiParam(name = "bankCountry", value = "开户行所属国家", required = true)
-    @NotBlank(message = "开户银行所属国家必选", groups = {BankNor.class})
-    @Size(min = 2, max = 8,message = "请选择正确的开户银行所属国家", groups = {BankNor.class, BankSimple.class})
+    @NotBlank(message = "{bank.bankCountry.empty}", groups = {BankNor.class})
+    @Size(min = 2, max = 8,message = "{bank.bankCountry.size}", groups = {BankNor.class, BankSimple.class})
     private String bankCountry ;
 
     /**
      * 开户行地址
      */
     @ApiParam(name = "bankAdd", value = "开户银行地址", required = true)
-    @NotBlank(message = "开户银行地址不能为空", groups = {BankNor.class})
-    @Size(min = 6, max = 128,message = "开户银行地址请输入[6 - 128]之间的中文字或者英文字母", groups = {BankNor.class})
+    @NotBlank(message = "{bank.bankAdd.empty}", groups = {BankNor.class})
+    @Size(min = 6, max = 128,message = "{bank.bankAdd.size}", groups = {BankNor.class})
     private String bankAdd ;
 
     @TableField(exist = false)
@@ -109,7 +108,7 @@ public class BankDetail extends Model<BankDetail> {
      * 证明材料，银行流水单据，银行月结单，户主护照等
      */
     @ApiParam(name = "accountCer", value = "证明材料，银行流水单据，银行月结单，户主护照等，支持PDF或压缩文件(zip,rar),20M以内", required = true)
-    @NotBlank(message = "企业证明材料必须上传，请检查是否上传资料", groups = {BankNor.class})
+    @NotBlank(message = "{bank.accountCer.empty}", groups = {BankNor.class})
     private String accountCer ;
 
     /**

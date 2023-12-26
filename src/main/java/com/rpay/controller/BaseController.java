@@ -1,11 +1,18 @@
 package com.rpay.controller;
 
 import com.rpay.model.User;
+import com.rpay.service.i18n.LocaleMessageUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class BaseController {
+/**
+ * @author steven
+ */
+public abstract class BaseController {
+    @Autowired
+    private LocaleMessageUtil messageSource;
 
     /**
      * 获取当前登录的user
@@ -44,5 +51,14 @@ public class BaseController {
         if ( null != subject ) {
             subject.logout() ;
         }
+    }
+
+    public String coverString(String el) {
+        if (StringUtils.contains(el,"{")
+                && StringUtils.contains(el,"}")) {
+            el = StringUtils.substringBetween(el,"{","}") ;
+            return messageSource.getMessage(el) ;
+        }
+        return el ;
     }
 }

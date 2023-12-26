@@ -31,84 +31,82 @@ public class KycCertification extends Model<KycCertification> {
      * 企业名字
      */
     @ApiParam(name = "companyName", value = "企业名称", required = true)
-    @NotBlank(message = "企业名称不能为空")
-    @Size(min = 4, max = 32,message = "企业名称请输入[4 - 32]之间的中文字或者英文字母")
+    @NotBlank(message = "{kyc.companyName.empty}")
+    @Size(min = 4, max = 32,message = "{kyc.companyName.size}")
     private String companyName ;
 
     /**
      * 企业英文名字
      */
     @ApiParam(name = "companyEnName", value = "企业英文名称", required = false)
-    @Size(min = 4, max = 64,message = "企业英文名称请输入[4 - 64]个英文字母")
+    @Size(min = 4, max = 64,message = "{kyc.companyEnName.size}企业英文名称请输入[4 - 64]个英文字母")
     private String companyEnName ;
 
     /**
      * 经营地址
      */
     @ApiParam(name = "businessAdd", value = "企业经营地址", required = true)
-    @NotBlank(message = "企业经营地址不能为空")
-    @Size(min = 4, max = 128,message = "企业经营地址请输入[4 - 128]之间的中文字或者英文字母")
+    @NotBlank(message = "{kyc.businessAdd.empty}")
+    @Size(min = 4, max = 128,message = "{kyc.businessAdd.size}")
     private String businessAdd ;
 
     /**
      * 公司类型
      */
     @ApiParam(name = "busType", value = "企业类型 1 个体工商户 2 企业 3 海外公司", required = true)
-    @NotNull(message = "企业类型必选")
+    @NotNull(message = "{kyc.busType.empty}")
     private Integer busType ;
 
     /**
      * 企业注册所在国家
      */
     @ApiParam(name = "country", value = "企业注册所在国家代码", required = true)
-    @NotBlank(message = "企业注册所在国家必选")
-    @Size(min = 2, max = 8,message = "请正确选择企业注册所在国家")
+    @NotBlank(message = "{kyc.country.empty}")
+    @Size(min = 2, max = 8,message = "{kyc.country.size}")
     private String country ;
 
     /**
      * 企业注册日期
      */
     @ApiParam(name = "regDate", value = "注册日期", required = true)
-    @NotBlank(message = "企业注册日期必填")
+    @NotBlank(message = "{kyc.regDate.empty}")
     private String regDate ;
 
     /**
      * 企业有效期
      */
     @ApiParam(name = "period", value = "企业有效期", required = true)
-    @NotBlank(message = "企业有效期必填")
+    @NotBlank(message = "{kyc.period.empty}")
     private String period ;
 
     /**
      * 月汇款金额
      */
     @ApiParam(name = "monthlyRemittance", value = "预估月汇款金额", required = true)
-    @NotBlank(message = "预估月汇款金额必填")
-    @Size(min = 2, max = 13, message = "汇款金额不能超过百亿额度，单位美金")
+    @NotBlank(message = "{kyc.monthlyRemittance.empty}")
+    @Size(min = 2, max = 13, message = "{kyc.monthlyRemittance.size}汇款金额不能超过一亿额度，单位美金")
     private String monthlyRemittance ;
 
     /**
      * 月交易笔数
      */
     @ApiParam(name = "transactionsMonth", value = "预估月交易笔数", required = true)
-    @NotBlank(message = "预估月交易笔数必填")
-    @Size(min = 1, max = 6, message = "月交易笔数不能超过10万笔")
+    @NotBlank(message = "{kyc.transactionsMonth.empty}")
     private String transactionsMonth ;
 
     /**
      * 单笔额度
      */
     @ApiParam(name = "transactionLimit", value = "单笔交易额度，请填写单笔最大额度", required = true)
-    @NotBlank(message = "单笔交易额度必填")
-    @Size(min = 2, max = 9, message = "单笔交易金额不能超过亿额度，单位美金")
+    @NotBlank(message = "{kyc.transactionLimit.empty}")
     private String transactionLimit ;
 
     /**
      * 业务场景说明
      */
     @ApiParam(name = "businessScenario", value = "业务场景说明", required = true)
-    @NotBlank(message = "业务场景必填")
-    @Size(min = 10, max = 256, message = "业务场景说明必须超过10个字节，不能超过256个字节")
+    @NotBlank(message = "{kyc.businessScenario.empty}")
+    @Size(min = 10, max = 256, message = "{kyc.businessScenario.size}")
     private String businessScenario ;
 
     /**

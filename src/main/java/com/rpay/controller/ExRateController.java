@@ -45,9 +45,9 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R setExchange(@Valid @RequestBody Exchange ex) {
         if ( accService.updateEx(ex) ) {
-            return R.succeed("操作成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取所支持的汇率对价格列表")
@@ -72,9 +72,9 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R delExchange(Long id) {
         if ( exService.delExchange(id) ) {
-            return R.succeed("删除成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "设置目前支持的收款户货币银行账户")
@@ -83,13 +83,13 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R setDeposit(@Validated(BankNor.class) @RequestBody BankDetail deposit) {
         if (StringUtils.isBlank(deposit.getCoinCode())){
-            R.failed("请选择收款货币！") ;
+            R.failed(coverString("{bank.coin.empty}")) ;
         }
         deposit.setUserId(getLoginUserId());
         if ( exService.updateDeposit(deposit) ){
-            return R.succeed("操作成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取平台收款户货币银行账户")
@@ -112,9 +112,9 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R delDeposit(Long id) {
         if (exService.delDeposit(id)) {
-            return R.succeed("删除成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         } else {
-            return R.failed("操作失败") ;
+            return R.failed(coverString("{sys.op.failed}")) ;
         }
     }
 
@@ -131,7 +131,7 @@ public class ExRateController extends BaseController{
         crt.setAgreement("ERC20");
         crt.setCryAdd(crt.getErcAdd());
         exService.updateCry(crt) ;
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "用户设置提款加密钱包地址，修改和新增都是用同一个接口")
@@ -139,10 +139,10 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R setOutCryAcc(HttpServletRequest request, @Validated(UserGroup.class) @RequestBody CryAccount crt) {
         if ( !StringUtils.equals(crt.getAgreement(),"ERC20") && !StringUtils.equals(crt.getAgreement(),"TRC20") ) {
-            throw new BusinessException("目前仅支持TRC20或者ERC20，其它协议暂不支持") ;
+            throw new BusinessException(coverString("{cryAcc.agreement.support}")) ;
         }
         if ( StringUtils.isBlank(crt.getPayPass()) && StringUtils.isBlank(crt.getVerCode()) ) {
-            return R.failed("请填写支付密码或者验证码");
+            return R.failed(coverString("{sys.pay.empty}"));
         }
         if ( StringUtils.isBlank(crt.getPayPass()) ) {
             //验证码校验，或者支付密码校验
@@ -150,7 +150,7 @@ public class ExRateController extends BaseController{
             String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
             if ( !StringUtils.equalsIgnoreCase(mailCode, crt.getVerCode())
                     && !StringUtils.equalsIgnoreCase(phoneCode, crt.getVerCode()) ) {
-                return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+                return R.failed(coverString("{sys.sms.valid}"));
             }
             request.getSession().removeAttribute("MailCode");
             request.getSession().removeAttribute("PhoneCode");
@@ -159,9 +159,9 @@ public class ExRateController extends BaseController{
         crt.setCryType(1) ;
         crt.setUserId(getLoginUserId()) ;
         if (exService.updateOutCry(crt)) {
-            return R.succeed("操作成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "用户提款地址分页查询")
@@ -183,7 +183,7 @@ public class ExRateController extends BaseController{
     @ResponseBody
     public R<List<CryAccount>> getCryAdd(String cryCode, Long userId) {
         if ( StringUtils.isBlank(cryCode) ) {
-            return R.failed("必须选择对应的币种") ;
+            return R.failed(coverString("{cryAcc.cryCode.empty}")) ;
         }
         if ( !userService.isAdmin(getLoginUser()) ) {
             userId = getLoginUserId() ;
@@ -192,7 +192,7 @@ public class ExRateController extends BaseController{
         if ( !ListUtils.isEmpty(cry) || userService.isAdmin(getLoginUser()) ) {
             return R.succeed(cry) ;
         }
-        return R.failed("该账户无对应钱包地址收款，请联系管理员添加") ;
+        return R.failed(coverString("{cryAcc.depAdd.empty}")) ;
     }
     //收款管理，汇兑管理，付款管理
 }

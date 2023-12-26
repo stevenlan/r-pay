@@ -37,13 +37,13 @@ public class LimitServicesImpl implements LimitServices {
         }*/
         if ( null != limit ) {
             if ( value < limit.getCoinMin() ) {
-                throw new BusinessException("不能小于单笔最小限额，请修改后再提交");
+                throw new BusinessException("{sys.limit.min}");
             }
             if ( null != limit.getCoinMax() && value > limit.getCoinMax() ) {
-                throw new BusinessException("不能大于单笔最大限额，请修改后再提交");
+                throw new BusinessException("{sys.limit.max}");
             }
         } else {
-            throw new BusinessException("该货币尚未开放操作，请联系客户经理");
+            throw new BusinessException("{sys.limit.exist}");
         }
     }
 }

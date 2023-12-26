@@ -100,9 +100,9 @@ public class AccountController extends BaseController {
     public R subKyc(@Valid @RequestBody KycCertification kyc) {
         kyc.setUserId(getLoginUserId()) ;
         if (accountService.updateKyc(kyc)) {
-            return R.succeed("保存成功") ;
+            return R.succeed(coverString("{sys.save.success}")) ;
         }
-        return R.failed("保存失败，请稍候重试") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取KYC审核信息")
@@ -124,9 +124,9 @@ public class AccountController extends BaseController {
     @ResponseBody
     public R perKyc(@Valid @RequestBody PerVO per) {
         if ( accountService.passKyc(per.getId(),per.getPass(),per.getReason()) ) {
-            return R.succeed("审批成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败，请重新操作") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取银行账户列表")
@@ -181,10 +181,10 @@ public class AccountController extends BaseController {
         }
 
         if ( StringUtils.isBlank(bank.getPayPass()) && StringUtils.isBlank(bank.getVerCode()) ) {
-            return R.failed("请填写支付密码或者验证码");
+            return R.failed(coverString("{sys.pay.empty}"));
         }
         if ( ListUtils.isEmpty(bank.getBindCoins()) ) {
-            return R.failed("请选择该银行账户支持的货币");
+            return R.failed(coverString("{bank.coin.empty}"));
         }
         if ( StringUtils.isBlank(bank.getPayPass()) ) {
             //验证码校验，或者支付密码校验
@@ -192,16 +192,16 @@ public class AccountController extends BaseController {
             String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
             if ( !StringUtils.equalsIgnoreCase(mailCode, bank.getVerCode())
                     && !StringUtils.equalsIgnoreCase(phoneCode, bank.getVerCode()) ) {
-                return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+                return R.failed(coverString("{sys.sms.valid}"));
             }
             request.getSession().removeAttribute("MailCode");
             request.getSession().removeAttribute("PhoneCode");
         }
         bank.setUserId(getLoginUserId()) ;
         if ( accountService.updateAccount(bank) ) {
-            return R.succeed("保存账户成功!") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败，请重新在试") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取银行账户信息")
@@ -218,11 +218,11 @@ public class AccountController extends BaseController {
     public R bankDel(HttpServletRequest request, @RequestBody BankDetail bank) {
         if ( userService.isAdmin(getLoginUser()) ) {
             if (accountService.bankDel(bank, null)) {
-                return R.succeed("删除成功") ;
+                return R.succeed(coverString("{sys.op.success}")) ;
             }
         } else {
             if ( StringUtils.isBlank(bank.getPayPass()) && StringUtils.isBlank(bank.getVerCode()) ) {
-                return R.failed("请填写支付密码或者验证码");
+                return R.failed(coverString("{sys.pay.empty}"));
             }
             if ( StringUtils.isBlank(bank.getPayPass()) ) {
                 //验证码校验，或者支付密码校验
@@ -230,16 +230,16 @@ public class AccountController extends BaseController {
                 String phoneCode = (String)request.getSession().getAttribute("PhoneCode") ;
                 if ( !StringUtils.equalsIgnoreCase(mailCode, bank.getVerCode())
                         && !StringUtils.equalsIgnoreCase(phoneCode, bank.getVerCode()) ) {
-                    return R.failed("邮箱或短信确认码不正确或已过期，请重新发送验证码");
+                    return R.failed(coverString("{sys.sms.valid}"));
                 }
                 request.getSession().removeAttribute("MailCode");
                 request.getSession().removeAttribute("PhoneCode");
             }
             if (accountService.bankDel(bank, getLoginUserId()) ) {
-                return R.succeed("删除成功") ;
+                return R.succeed(coverString("{sys.op.success}")) ;
             }
         }
-        return R.failed("没有操作改银行账户权限") ;
+        return R.failed(coverString("{sys.op.unAuth}")) ;
     }
 
     @ApiOperation(value = "审核银行账户")
@@ -248,9 +248,9 @@ public class AccountController extends BaseController {
     @ResponseBody
     public R perBank(@Valid @RequestBody PerVO per) {
         if (accountService.passBank(per.getId(),per.getPass(),per.getReason())) {
-            return R.succeed("审批账户成功") ;
+            return R.succeed(coverString("{sys.op.success}")) ;
         }
-        return R.failed("操作失败，氢稍后在试") ;
+        return R.failed(coverString("{sys.op.failed}")) ;
     }
 
     @ApiOperation(value = "获取国家列表")

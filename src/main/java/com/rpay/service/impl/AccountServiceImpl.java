@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
             boolean flag = userService.checkPayPass(getLoginUserId(), bank.getPayPass()) ;
             if ( !flag ) {
                 //输入错误计数
-                throw new BusinessException("支付密码错误，请重新输入") ;
+                throw new BusinessException("{sys.pay.err}") ;
             }
         }
         if ( null != bank.getId() ) {
@@ -79,13 +79,13 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
         KycCertification kyc1 = findKyc(kyc.getUserId()) ;
         if ( !userService.isAdmin(getLoginUser()) ) {
             if (StringUtils.isBlank(kyc.getRegCer())) {
-                throw new BusinessException("企业证明资料必须上传，请检查是否已经上传商业登记证书或营业执照，以及经营地址证明，银行水电账单等资料，支持PDF或压缩文件等格式") ;
+                throw new BusinessException("{kyc.regCer.empty}") ;
             }
             if (StringUtils.isBlank(kyc.getLegal())) {
-                throw new BusinessException("法人资料必须上传，请检查是否上传法人护照及居住地址证明，支持PDF或压缩文件等格式") ;
+                throw new BusinessException("{kyc.legal.empty}") ;
             }
             if ( null != kyc1 && kyc1.getKycStatus() != 2 ) {
-                throw new BusinessException("kyc信息已提交，未被驳回不能修改") ;
+                throw new BusinessException("{kyc.op.lock}") ;
             }
         }
 
@@ -102,7 +102,7 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
     public boolean updateEx(Exchange ex) {
         if (StringUtils.isBlank(ex.getExFrom()) || StringUtils.isBlank(ex.getExTarget())) {
             log.info(ex.toString()) ;
-            throw new ParameterException("汇率的兑换对为空") ;
+            throw new ParameterException("{exChange.coins.empty}") ;
         }
         int count = exMapper.selectCount(new QueryWrapper<Exchange>().lambda()
                 .eq(Exchange::getExFrom,ex.getExFrom())
@@ -198,7 +198,7 @@ public class AccountServiceImpl implements AccountService, SessionUtils {
                 boolean flag = userService.checkPayPass(getLoginUserId(), bank.getPayPass()) ;
                 if ( !flag ) {
                     //输入错误计数
-                    throw new BusinessException("支付密码错误，请重新输入") ;
+                    throw new BusinessException("{sys.pay.err}") ;
                 }
             }
         }

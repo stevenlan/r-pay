@@ -22,12 +22,12 @@ public class CryptRequest extends Model<CryptRequest> {
     @TableId
     private Long id ;
     @ApiParam(name = "coinCode", value = "货币代码，必须选择一个加密货币代码(目前只有USDT)", required = true)
-    @NotBlank
+    @NotBlank(message = "{cryReq.coinCode.empty}")
     private String coinCode ;
     @ApiParam(name = "srcCode", value = "提款来源账本的货币代码，提款时必选，充值数字货币时不需要选择", required = false)
     private String srcCode ;
     @ApiParam(name = "reqValue", value = "申请金额，必填", required = true)
-    @NotNull
+    @NotNull(message = "{cryReq.reqValue.empty}")
     private Double reqValue ;
     @ApiParam(name = "withdrawValue", value = "兑换完成的实际金额，无需填写，后台根据汇率计算", required = false)
     private Double withdrawValue ;
@@ -37,10 +37,10 @@ public class CryptRequest extends Model<CryptRequest> {
     @ApiParam(name = "commission", value = "手续费，最后财务审核确认出账时必填", required = false)
     private Float commission ;
     @ApiParam(name = "agreement", value = "加密链，必填", required = true)
-    @NotBlank
+    @NotBlank(message = "{cryReq.agreement.empty}")
     private String agreement ;
     @ApiParam(name = "cryptAdd", value = "钱包地址，入金时填的是转账钱包地址，出金时填的是接收钱包地址", required = true)
-    @NotBlank
+    @NotBlank(message = "{cryReq.cryptAdd.empty}")
     private String cryptAdd ;
     @ApiParam(name = "tid", value = "转账交易地址，入金时提交申请时填写，出金时审核出账时填写", required = false)
     private String tid ;

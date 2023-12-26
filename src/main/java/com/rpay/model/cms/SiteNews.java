@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -24,30 +25,31 @@ public class SiteNews extends Model<SiteNews> {
     @TableId
     private Long id ;
 
-    @ApiParam(name = "lang", value = "新闻语言", required = true)
-    @NotBlank(message = "新闻语言不能为空")
+    @ApiParam(name = "lang", value = "新闻语种", required = true)
+    @NotBlank(message = "{news.lang.empty}")
     private String lang ;
 
     @ApiParam(name = "title", value = "新闻标题", required = true)
-    @NotBlank(message = "新闻标题不能为空")
+    @NotBlank(message = "{news.title.empty}")
     private String title ;
 
     @ApiParam(name = "cover", value = "新闻简介图片，上传图片后保存对应的图片地址，图片格式大小按照首页面板图片的格式提示，上船后等比放缩", required = true)
-    @NotBlank(message = "新闻简介图片不能为空")
+    @NotBlank(message = "{news.cover.empty}")
     private String cover ;
 
     @ApiParam(name = "mainPoint", value = "新闻摘要简介，用于在首页新闻陈列时显示的简介内容", required = true)
-    @NotBlank(message = "新闻摘要不能为空")
+    @NotBlank(message = "{news.mainPoint.empty}")
     private String mainPoint ;
 
     @ApiParam(name = "content", value = "新闻主题内容，可支持html的富文本格式", required = true)
-    @NotBlank(message = "新闻内容不能为空")
+    @NotBlank(message = "{news.content.empty}")
     private String content ;
 
     @ApiParam(name = "newStatus", value = "新闻状态，不需要填写", required = false)
     private Integer newStatus ;
 
     @ApiParam(name = "recommend", value = "是否推荐, 必选，穿boolean值", required = true)
+    @NotNull(message = "{news.recommend.empty}")
     private Boolean recommend ;
 
     @ApiParam(name = "count", value = "点击次数", required = false)

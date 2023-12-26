@@ -179,7 +179,7 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
             boolean flag = userService.checkPayPass(getLoginUserId(), cryAcc.getPayPass()) ;
             if ( !flag ) {
                 //输入错误计数
-                throw new BusinessException("支付密码错误，请重新输入") ;
+                throw new BusinessException("{sys.pay.err}") ;
             }
         }
         if ( null == cryAcc.getId() ) {

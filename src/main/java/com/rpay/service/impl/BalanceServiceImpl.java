@@ -61,10 +61,10 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         if ( null != dep.getId() ) {
             DepRequest old = depMapper.selectById(dep.getId()) ;
             if ( old.getReqStatus() != 1 ) {
-                throw new BusinessException("该入账单据已经不允许修改") ;
+                throw new BusinessException("{deposit.op.lock}") ;
             }
             if (StringUtils.isBlank(dep.getReqProof()) ) {
-                throw new BusinessException("确认汇款必须提交回款转帐凭证和相关资料") ;
+                throw new BusinessException("{deposit.reqProof.empty}") ;
             }
 
             LambdaUpdateChainWrapper<DepRequest> depUp = new LambdaUpdateChainWrapper<>(depMapper) ;
@@ -78,11 +78,11 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         dep.setReqStatus(1) ;
         BankDetail bank = accountService.findBank(dep.getBankId()) ;
         if ( null == bank ) {
-            throw new BusinessException("收款账户不存在") ;
+            throw new BusinessException("{deposit.bank.exist}") ;
         }
         BankDetail send = accountService.findBank(dep.getSendBank()) ;
         if ( null == send ) {
-            throw new BusinessException("打款账户不存在") ;
+            throw new BusinessException("{deposit.sendBank.exist}") ;
         }
         dep.setAccountName(bank.getAccountName()) ;
         dep.setSendAccount(send.getAccountName()) ;
@@ -115,10 +115,10 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     public boolean perDeposit(PerReqVO dep) {
         DepRequest old = depMapper.selectById(dep.getId()) ;
         if ( null == old ) {
-            throw new BusinessException("入账申请不存在.") ;
+            throw new BusinessException("{deposit.order.exist}") ;
         }
         if ( old.getReqStatus() != 2 ) {
-            throw new BusinessException("当前状态不允许审核.") ;
+            throw new BusinessException("{deposit.op.per}") ;
         }
         LambdaUpdateChainWrapper<DepRequest> depUp = new LambdaUpdateChainWrapper<>(depMapper) ;
         depUp.eq(DepRequest::getId,dep.getId()) ;
@@ -126,7 +126,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         Integer status ;
         if ( dep.getPass() ) {
             if (null == dep.getDepValue()) {
-                throw new BusinessException("审核通过必须填写实际入账金额.") ;
+                throw new BusinessException("{deposit.op.depValue}") ;
             }
             status = 4 ;
         } else {
@@ -156,13 +156,13 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     public boolean cancelDeposit(Long reqId) {
         DepRequest old = depMapper.selectById(reqId) ;
         if ( null == old ) {
-            throw new BusinessException("入账申请不存在.") ;
+            throw new BusinessException("{deposit.order.exist}") ;
         }
         if ( !old.getUserId().equals(getLoginUserId()) ) {
-            throw new BusinessException("该单据不属于你，不能操作.") ;
+            throw new BusinessException("{deposit.op.unAuth}") ;
         }
         if ( old.getReqStatus() != 1 ) {
-            throw new BusinessException("当前状态不允许取消.") ;
+            throw new BusinessException("{deposit.op.cancel}") ;
         }
         LambdaUpdateChainWrapper<DepRequest> depUp = new LambdaUpdateChainWrapper<>(depMapper) ;
         depUp.eq(DepRequest::getId,reqId) ;
@@ -184,7 +184,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
             boolean flag = userService.checkPayPass(getLoginUserId(), withdraw.getPayPass()) ;
             if ( !flag ) {
                 //输入错误计数
-                throw new BusinessException("支付密码错误，请重新输入") ;
+                throw new BusinessException("{sys.pay.err}") ;
             }
         }
         /*
@@ -207,7 +207,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
 
         BankDetail bank = accountService.findBank(withdraw.getBankId()) ;
         if ( null == bank ) {
-            throw new BusinessException("选择的提款接收账户不可用") ;
+            throw new BusinessException("{deposit.sendBank.exist}") ;
         }
         withdraw.setAccountName(bank.getAccountName()) ;
         withdraw.setReqStatus(1) ;
@@ -259,10 +259,10 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     public boolean perWithdrawRequest(PerReqVO wit) {
         WithdrawRequest old = findWithdrawRequest(wit.getId()) ;
         if ( null == old ) {
-            throw new BusinessException("提款申请不存在") ;
+            throw new BusinessException("{deposit.op.lock}") ;
         }
         if ( old.getReqStatus() >= 3 ) {
-            throw new BusinessException("该提款申请不能重复审批") ;
+            throw new BusinessException("{withdraw.op.rePer}") ;
         }
         LambdaUpdateChainWrapper<WithdrawRequest> up = new LambdaUpdateChainWrapper<>(witMapper) ;
         up.eq(WithdrawRequest::getId, wit.getId()) ;
@@ -284,7 +284,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
                 throw new BusinessException("必须填写实际提款金额") ;
             }*/
             if ( null == wit.getCommission() ) {
-                throw new BusinessException("必须填写手续费") ;
+                throw new BusinessException("{withdraw.commission.empty}") ;
             }
             up.set(WithdrawRequest::getWithdrawValue, commissionReq(old.getReqValue(), wit.getCommission())) ;
             up.set(WithdrawRequest::getCommission, wit.getCommission()) ;
@@ -300,13 +300,13 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     public boolean cancelWithdraw(Long reqId) {
         WithdrawRequest old = findWithdrawRequest(reqId) ;
         if ( null == old ) {
-            throw new BusinessException("提款申请不存在") ;
+            throw new BusinessException("{deposit.op.lock}") ;
         }
         if ( !old.getUserId().equals(getLoginUserId()) ) {
-            throw new BusinessException("该单据不属于你，不能操作.") ;
+            throw new BusinessException("{deposit.op.unAuth}") ;
         }
         if ( 1 != old.getReqStatus() ) {
-            throw new BusinessException("该提款申请不能取消") ;
+            throw new BusinessException("{deposit.op.cancel}") ;
         }
 
         LambdaUpdateChainWrapper<WithdrawRequest> up = new LambdaUpdateChainWrapper<>(witMapper) ;
@@ -323,7 +323,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
             boolean flag = userService.checkPayPass(getLoginUserId(), req.getPayPass()) ;
             if ( !flag ) {
                 //输入错误计数
-                throw new BusinessException("支付密码错误，请重新输入") ;
+                throw new BusinessException("{sys.pay.err}") ;
             }
         }
         String act ;
@@ -357,7 +357,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         if ( null != req.getId() && req.getReqType() == 1 ) {
             CryptRequest old = cryMapper.selectById(req.getId()) ;
             if ( old.getReqStatus() != 1 ) {
-                throw new BusinessException("该申请单已锁定，不允许修改") ;
+                throw new BusinessException("{deposit.op.lock}") ;
             }
             new LambdaUpdateChainWrapper<CryptRequest>(cryMapper).eq(CryptRequest::getId,req.getId())
                     .set(CryptRequest::getReqProof,req.getReqProof()).update() ;
@@ -414,10 +414,10 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
         CryptRequest req = findCryReq(per.getId()) ;
         LambdaUpdateChainWrapper<CryptRequest> up = new LambdaUpdateChainWrapper<>(cryMapper) ;
         if ( null == req ) {
-            throw new BusinessException("该审批申请不存在") ;
+            throw new BusinessException("{deposit.order.exist}") ;
         }
         if ( 1 != req.getReqStatus() ) {
-            throw new BusinessException("该申请已经不能审批") ;
+            throw new BusinessException("{withdraw.op.rePer}") ;
         }
         up.eq(CryptRequest::getId, per.getId()) ;
 
@@ -435,7 +435,7 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
                 ,CryptRequest::getTid, per.getTid()) ;
         if ( req.getReqType() == 2 && null != per.getCommission() ) {
             if ( null == per.getCommission() ) {
-                throw new BusinessException("必须填写手续费") ;
+                throw new BusinessException("{withdraw.commission.empty}") ;
             }
             up.set( CryptRequest::getWithdrawValue, commissionReq(req.getReqValue(), per.getCommission()) ) ;
             up.set( CryptRequest::getCommission, per.getCommission() ) ;
@@ -474,13 +474,13 @@ public class BalanceServiceImpl implements BalanceService, SessionUtils {
     public boolean cancelReq(Long reqId) {
         CryptRequest req = findCryReq(reqId) ;
         if ( null == req ) {
-            throw new BusinessException("该申请不存在") ;
+            throw new BusinessException("{deposit.order.exist}") ;
         }
         if ( !req.getUserId().equals(getLoginUserId()) ) {
-            throw new BusinessException("该单据不属于你，不能操作.") ;
+            throw new BusinessException("{deposit.op.unAuth}") ;
         }
         if ( 1 != req.getReqStatus() || 1 == req.getReqType() ) {
-            throw new BusinessException("该申请不能取消") ;
+            throw new BusinessException("{deposit.op.cancel}") ;
         }
 
         LambdaUpdateChainWrapper<CryptRequest> up = new LambdaUpdateChainWrapper<>(cryMapper) ;

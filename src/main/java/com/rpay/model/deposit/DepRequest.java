@@ -29,25 +29,25 @@ public class DepRequest extends Model<DepRequest> {
      * 入金货币
      */
     @ApiParam(name = "coinCode", value = "法币入金货币代码，必选，只能选择法币货币代码", required = true)
-    @NotBlank
+    @NotBlank(message = "{deposit.coinCode.empty}")
     private String coinCode ;
     /**
      * 入金收款银行账户
      */
     @ApiParam(name = "bankId", value = "入金时用于收款的银行账户，无需填写，只需要传递coinCode查询即刻获得管理端设置好对应的入金收款账户", required = true)
-    @NotNull
+    @NotNull(message = "{deposit.bank.empty}")
     private Long bankId ;
     /**
      * 入金打款银行账户
      */
     @ApiParam(name = "sendBank", value = "入金时用户的打款账户，必选自己登记过的账户", required = true)
-    @NotNull
+    @NotNull(message = "{deposit.sendBank.empty}")
     private Long sendBank ;
     /**
      * 入金金额
      */
     @ApiParam(name = "reqValue", value = "申请入金金额", required = true)
-    @NotNull(message = "充值金额必填")
+    @NotNull(message = "{deposit.reqValue.empty}")
     private Double reqValue ;
     @ApiParam(name = "depValue", value = "实际到账金额，管理端审核时需要填写", required = false)
     private Double depValue ;

@@ -42,8 +42,8 @@ public class User extends Model<User> {
      * 密码
      */
     @ApiParam(name = "password", value = "必填，密码，前端需要一个确认密码来保证用户两次输入都是同一个密码", required = true)
-    @NotBlank(message = "密码不能为空")
-    @Size(min=6, max = 16, message = "密码位数在[6-16]间")
+    @NotBlank(message = "{user.pwd.empty}")
+    @Size(min=6, max = 16, message = "{user.pwd.size}")
     private String password;
 
     /**
@@ -56,9 +56,8 @@ public class User extends Model<User> {
      * 邮箱
      */
     @ApiParam(name = "email", value = "邮箱地址，电话和邮箱必填其一，用户登录时的账号依据之一", required = true)
-    @NotBlank(message = "邮箱不能为空")
-    @Email(message = "邮箱格式错误")
-    @Size(min=8, max = 32, message = "邮箱输入位数在[8-32]间")
+    @NotBlank(message = "{user.email.empty}")
+    @Email(message = "{user.email.format}")
     private String email ;
     @ApiParam(name = "phone", value = "电话好吗，电话和邮箱必填其一，用户登录时的账号依据之一", required = false)
     private String phone ;
@@ -95,7 +94,7 @@ public class User extends Model<User> {
      * 推广码，谁推广进来的
      */
     @ApiParam(name = "inviteCode", value = "推广码，默认推广码是SUPER-PAY", required = true)
-    @NotBlank( message = "推荐人代码不能为空")
+    @NotBlank( message = "{user.inviteCode.empty}")
     private String inviteCode;
 
     @ApiParam(name = "payPass", value = "支付密码", required = true)
@@ -105,7 +104,7 @@ public class User extends Model<User> {
      * 激活码
      */
     @ApiParam(name = "checkCode", value = "邮箱或者手机确认码，目前未对接接口方，统一输入8888", required = true)
-    @NotBlank( message = "邮箱或者手机验证码不能为空")
+    @NotBlank( message = "{user.checkCode.empty}")
     private String checkCode ;
 
     /**

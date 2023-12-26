@@ -25,19 +25,19 @@ public class Exchange extends Model<Exchange> {
     @TableId
     private Long id;
     @ApiParam(name = "fromCountry", value = "来源货币国家，可以是法币，也可以是数据货币,提交的是地区列表的code", required = true)
-    @NotBlank( message = "来源货币必选")
+    @NotBlank( message = "{exChange.fromCountry.empty}")
     private String fromCountry ;
     @ApiParam(name = "exFrom", value = "来源货币，可以是法币，也可以是数据货币,提交的是地区列表的coinCode", required = true)
-    @NotBlank( message = "来源货币必选")
+    @NotBlank( message = "{exChange.exFrom.empty}")
     private String exFrom ;
     @ApiParam(name = "targetCountry", value = "目标货币国家，可以是法币，也可以是数据货币,提交的是地区列表的code", required = true)
-    @NotBlank( message = "来源货币必选")
+    @NotBlank( message = "{exChange.targetCountry.empty}")
     private String targetCountry ;
     @ApiParam(name = "exTarget", value = "目标货币，可以是法币，也可以是数据货币,提交的是地区列表的coinCode", required = true)
-    @NotBlank( message = "目标货币必选")
+    @NotBlank( message = "{exChange.exTarget.empty}")
     private String exTarget ;
     @ApiParam(name = "exRate", value = "兑换汇率", required = true)
-    @NotNull( message = "兑换汇率必填")
+    @NotNull( message = "{exChange.exRate.empty}")
     private Float exRate ;
 
     /**

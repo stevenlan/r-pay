@@ -71,7 +71,7 @@ public class ChangeController extends BaseController implements SessionUtils {
         change.setUserId(getLoginUserId()) ;
         //计算限制
         billService.creChange(change) ;
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 
     @ApiOperation(value = "汇兑详情获取")
@@ -86,7 +86,7 @@ public class ChangeController extends BaseController implements SessionUtils {
     @ResponseBody
     public R changeCancel(Long id) {
         billService.cancelChange(id) ;
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 
     @ApiOperation(value = "审核汇款详情单")
@@ -95,6 +95,6 @@ public class ChangeController extends BaseController implements SessionUtils {
     @ResponseBody
     public R changePer(@Valid @RequestBody PerChange per) {
         billService.perChange(per.getId(),per.getPass(),per.getMime()) ;
-        return R.succeed("操作成功") ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 }
