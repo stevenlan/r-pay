@@ -5,7 +5,9 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.rpay.common.utils.R;
 import com.rpay.model.CryAccount;
+import com.rpay.model.User;
 import com.rpay.service.ExchangeService;
+import com.rpay.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -34,6 +37,7 @@ public class UserController extends BaseController {
     //private final UserService userService;
     //private final KycDetailService kycService ;
     private final ExchangeService exService ;
+    private final UserService userService ;
 
 
     /**
@@ -59,13 +63,19 @@ public class UserController extends BaseController {
     @GetMapping("api/depositWalletQrCode")
     public void depositWalletQrCode(String cryCode, String agreement, HttpServletResponse response) throws IOException {
         List<CryAccount> accList = exService.findCry(cryCode, getLoginUserId()) ;
+        OutputStream out = response.getOutputStream() ;
         AtomicReference<BufferedImage> image = new AtomicReference<>();
         accList.forEach(cry -> {
             if (StringUtils.equalsIgnoreCase(agreement, cry.getAgreement())) {
                 image.set(QrCodeUtil.generate(cry.getCryAdd(), 360, 360));
             }
         });
-        ImgUtil.write(image.get(),"png",response.getOutputStream());
+        try {
+            ImgUtil.write(image.get(), "png", out);
+        } finally {
+            out.flush() ;
+            out.close() ;
+        }
     }
 
     /**
@@ -76,7 +86,13 @@ public class UserController extends BaseController {
     @GetMapping("api/walletQrCode")
     public void walletQrCode(Long id, HttpServletResponse response) throws IOException {
         CryAccount cry = exService.findByID(id) ;
-        QrCodeUtil.generate(cry.getCryAdd(), 360, 360,"png",response.getOutputStream()) ;
+        OutputStream out = response.getOutputStream() ;
+        try {
+            QrCodeUtil.generate(cry.getCryAdd(), 360, 360, "png", out);
+        } finally {
+            out.flush() ;
+            out.close() ;
+        }
     }
 
     /**
@@ -86,8 +102,15 @@ public class UserController extends BaseController {
     @ApiOperation(value = "生成当前用户推荐二维码图片")
     @GetMapping("api/inviteQrCode")
     public void inviteQrCode(String backUrl, HttpServletResponse response) throws IOException {
-        String content = backUrl+getLoginUser().getProviderId() ;
-        QrCodeUtil.generate(content, 360, 360,"png",response.getOutputStream()) ;
+        User u = userService.getById(getLoginUserId()) ;
+        String content = backUrl+u.getProviderId() ;
+        OutputStream out = response.getOutputStream() ;
+        try {
+            QrCodeUtil.generate(content, 360, 360, "png", out );
+        } finally {
+            out.flush() ;
+            out.close() ;
+        }
     }
 
     /*
