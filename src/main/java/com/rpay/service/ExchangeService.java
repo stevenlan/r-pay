@@ -124,9 +124,18 @@ public interface ExchangeService {
 
     /**
      * 获取用户提款地址列表
+     * @param agreement
+     * @param cryCode
      * @return
      */
     List<CryAccount> listCryAcc(String agreement, String cryCode) ;
+
+    /**
+     * 获取用户提款地址列表
+     * @param id
+     * @return
+     */
+    CryAccount findByID(Long id) ;
 
     /**
      * 全部的来源货币

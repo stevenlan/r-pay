@@ -23,7 +23,8 @@
         <java.version>8</java.version>
         <druid-starter>1.1.17</druid-starter>
         <mybatis-plus-boot-starter.version>3.3.0</mybatis-plus-boot-starter.version>
-        <hutool.version>5.3.7</hutool.version>
+        <hutool.version>5.8.24</hutool.version>
+        <zxing-core.version>3.5.2</zxing-core.version>
         <fastjson.version>1.2.70</fastjson.version>
         <qiniu.version>7.2.23</qiniu.version>
         <aliyun-sdk-oss>3.8.1</aliyun-sdk-oss>
@@ -38,7 +39,6 @@
         <thymeleaf-extras-shiro.version>2.0.0</thymeleaf-extras-shiro.version>
         <commons-codec.version>1.10</commons-codec.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
-        <hutool.version>5.3.7</hutool.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <junit.platform.version>1.5.2</junit.platform.version>
     </properties>
@@ -213,6 +213,11 @@
         </dependency>
 
         <!-- hutool java工具类库  -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${zxing-core.version}</version>
+        </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

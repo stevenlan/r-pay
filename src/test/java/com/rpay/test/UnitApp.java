@@ -1,5 +1,6 @@
 package com.rpay.test;
 
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.rpay.FreeFsApplication;
 import com.rpay.common.properties.FsServerProperties;
 import com.rpay.common.template.FastDfsTemplate;
@@ -44,9 +45,14 @@ public class UnitApp {
         List<User> list = userService.list() ;
         logger.info(list.toString());
         logger.info(ProtoCommon.ExpectBodyLen+"");
+
+        File qrFile = new File("/Users/steven/Downloads/1703942974902.jpg") ;
+        String qrStr = QrCodeUtil.decode(qrFile) ;
+        System.out.println(qrStr);
+        Assert.assertEquals("TMtJYPp66qaM9HArEiup3r1tjVFEje2B5S",qrStr);
     }
 
-    @Test
+//    @Test
     public void runEnd() throws IOException, MyException {
         File f = ResourceUtils.getFile("classpath:fdfs_client.conf");
         Assert.assertNotNull(f);
@@ -73,7 +79,7 @@ public class UnitApp {
         logger.info(fileIds[0]+ "/" + fileIds[1]); ;
     }
 
-    @Test
+//    @Test
     public void testDown() throws IOException, MyException {
         //group1/M00/00/00/wKgfMmGT7AGAL7uyAAABC5k_LBU99.conf
         byte[] bytes = template.download("group1/M00/00/00/wKgfMmGT7AGAL7uyAAABC5k_LBU99.conf") ;

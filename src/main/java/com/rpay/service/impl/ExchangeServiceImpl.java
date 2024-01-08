@@ -217,6 +217,11 @@ public class ExchangeServiceImpl implements ExchangeService, SessionUtils {
     }
 
     @Override
+    public CryAccount findByID(Long id) {
+        return cryMapper.selectById(id) ;
+    }
+
+    @Override
     public List<Countries> queryExSource() {
         return countriesMapper.selectExSource() ;
     }

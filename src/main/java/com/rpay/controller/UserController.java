@@ -1,29 +1,94 @@
 package com.rpay.controller;
 
 
+import cn.hutool.core.img.ImgUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import com.rpay.common.utils.R;
+import com.rpay.model.CryAccount;
+import com.rpay.service.ExchangeService;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * 处理用户查询审批设定等级结算等功能
  * @author steven
  */
-//@Slf4j
-//@Controller
-//@RequestMapping("user")
-//@RequiredArgsConstructor
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 public class UserController extends BaseController {
     //private final UserService userService;
     //private final KycDetailService kycService ;
+    private final ExchangeService exService ;
 
 
-    /*
+    /**
      * 获取当前登录的用户信息
      * @return
-
-    @PostMapping("/get")
+     */
+    @ApiOperation(value = "解析二维码图片的值")
+    @PostMapping("api/qrDecode")
     @ResponseBody
-    public R get() {
-        User user = getLoginUser() ;
-        return R.succeed(user) ;
-    }*/
+    public R qrDecode(@RequestParam(value = "file") MultipartFile[] files) throws IOException {
+        if ( null != files && files.length == 1 ) {
+            String qrCode = QrCodeUtil.decode(files[0].getInputStream()) ;
+            return R.succeed(qrCode) ;
+        }
+        return R.failed("{sys.op.failed}") ;
+    }
+
+    /**
+     * 获取当前登录的用户信息
+     * @return
+     */
+    @ApiOperation(value = "生成当前用户指定类型的收款钱包地址的二维码图片")
+    @GetMapping("api/depositWalletQrCode")
+    public void depositWalletQrCode(String cryCode, String agreement, HttpServletResponse response) throws IOException {
+        List<CryAccount> accList = exService.findCry(cryCode, getLoginUserId()) ;
+        AtomicReference<BufferedImage> image = new AtomicReference<>();
+        accList.forEach(cry -> {
+            if (StringUtils.equalsIgnoreCase(agreement, cry.getAgreement())) {
+                image.set(QrCodeUtil.generate(cry.getCryAdd(), 360, 360));
+            }
+        });
+        ImgUtil.write(image.get(),"png",response.getOutputStream());
+    }
+
+    /**
+     * 获取当前登录的用户信息
+     * @return
+     */
+    @ApiOperation(value = "生成当前用户指定提款钱包地址的二维码图片")
+    @GetMapping("api/walletQrCode")
+    public void walletQrCode(Long id, HttpServletResponse response) throws IOException {
+        CryAccount cry = exService.findByID(id) ;
+        QrCodeUtil.generate(cry.getCryAdd(), 360, 360,"png",response.getOutputStream()) ;
+    }
+
+    /**
+     * 获取当前登录的用户信息
+     * @return
+     */
+    @ApiOperation(value = "生成当前用户推荐二维码图片")
+    @GetMapping("api/inviteQrCode")
+    public void inviteQrCode(String backUrl, HttpServletResponse response) throws IOException {
+        String content = backUrl+getLoginUser().getProviderId() ;
+        QrCodeUtil.generate(content, 360, 360,"png",response.getOutputStream()) ;
+    }
 
     /*
     @GetMapping({"","index"})

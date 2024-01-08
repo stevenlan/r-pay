@@ -131,7 +131,7 @@ public class ExRateController extends BaseController{
         crt.setAgreement("ERC20");
         crt.setCryAdd(crt.getErcAdd());
         exService.updateCry(crt) ;
-        return R.succeed(coverString("{sys.op.failed}")) ;
+        return R.succeed(coverString("{sys.op.success}")) ;
     }
 
     @ApiOperation(value = "用户设置提款加密钱包地址，修改和新增都是用同一个接口")
