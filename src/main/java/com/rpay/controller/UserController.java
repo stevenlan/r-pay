@@ -5,7 +5,9 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.rpay.common.utils.R;
 import com.rpay.model.CryAccount;
+import com.rpay.model.CryptRequest;
 import com.rpay.model.User;
+import com.rpay.service.BalanceService;
 import com.rpay.service.ExchangeService;
 import com.rpay.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -34,10 +36,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController extends BaseController {
-    //private final UserService userService;
-    //private final KycDetailService kycService ;
     private final ExchangeService exService ;
     private final UserService userService ;
+    private final BalanceService balService ;
 
 
     /**
@@ -89,6 +90,23 @@ public class UserController extends BaseController {
         OutputStream out = response.getOutputStream() ;
         try {
             QrCodeUtil.generate(cry.getCryAdd(), 360, 360, "png", out);
+        } finally {
+            out.flush() ;
+            out.close() ;
+        }
+    }
+
+    /**
+     * 获取当前登录的用户信息
+     * @return
+     */
+    @ApiOperation(value = "生成当前用户指定提款钱包地址的二维码图片")
+    @GetMapping("api/cryWithdrawQrCode")
+    public void cryWithdrawQrCode(Long id, HttpServletResponse response) throws IOException {
+        CryptRequest req = balService.findCryReq(id) ;
+        OutputStream out = response.getOutputStream() ;
+        try {
+            QrCodeUtil.generate(req.getCryptAdd(), 360, 360, "png", out);
         } finally {
             out.flush() ;
             out.close() ;
